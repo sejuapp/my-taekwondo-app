@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { AllSharedImports } from '@app/shared/all-shared-imports';
 
 @Component({
   selector: 'app-combates',
-  imports: [],
+  imports: [
+    ...AllSharedImports
+  ],
   templateUrl: './combates.component.html',
   styleUrl: './combates.component.scss'
 })
