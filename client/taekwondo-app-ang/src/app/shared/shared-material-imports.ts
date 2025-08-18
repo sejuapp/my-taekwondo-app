@@ -9,6 +9,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatCustomCardComponent } from '@app/wrapper/custom-card.component';
 
 export const SharedMaterialImports = [
   MatButtonModule,
@@ -21,5 +23,7 @@ export const SharedMaterialImports = [
   MatTableModule,
   MatDialogModule,
   MatCheckboxModule,
-  DragDropModule
+  DragDropModule,
+  FlexLayoutModule,
+  MatCustomCardComponent
 ];

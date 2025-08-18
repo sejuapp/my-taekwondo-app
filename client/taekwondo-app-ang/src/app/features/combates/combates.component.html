@@ -1,21 +1,34 @@
-
-<mat-card class="example-card" appearance="outlined">
+<mat-card-custom>
   <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Shiba Inu</mat-card-title>
-    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+    <mat-card-title>Emparejamiento</mat-card-title>
+    <mat-card-subtitle>Se realiza el emparejamiento de los competidores</mat-card-subtitle>
   </mat-card-header>
 
-  <mat-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="primary">Botón Primario</button>
-    <button mat-raised-button color="warn">Botón Advertencia</button>
-  </mat-card-actions>
-</mat-card>
+  <mat-card-content class="custom-content">
 
+    <div fxLayout="row" fxLayoutGap="16px" fxLayout.lt-sm="column">
+      <mat-form-field fxFlex="50" fxFlex.lt-sm="100">
+        <mat-label>Campo 1</mat-label>
+        <input matInput>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="50" fxFlex.lt-sm="100">
+        <mat-label>Campo 2</mat-label>
+        <input matInput>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field fxFlex="100">
+        <mat-label>Campo 3</mat-label>
+        <input matInput>
+      </mat-form-field>
+    </div>
+
+
+  </mat-card-content>
+  <mat-card-actions class="custom-actions">
+    <button mat-raised-button color="primary">Aceptar</button>
+    <button mat-raised-button color="warn">Cancelar</button>
+  </mat-card-actions>
+</mat-card-custom>
