@@ -18,8 +18,7 @@ export class CombatesComponent {
     { id: 4, nombre: 'Ana Torres', categoria: 'Junior', peso: '60kg' },
     { id: 5, nombre: 'Luis Martinez', categoria: 'Senior', peso: '80kg' },
     { id: 6, nombre: 'Sofia Lopez', categoria: 'Cadete', peso: '50kg' },
-    { id: 7, nombre: 'Pedro Sanchez', categoria: 'Junior', peso: '70kg' },
-    { id: 8, nombre: 'Laura Diaz', categoria: 'Senior', peso: '65kg' }
+    { id: 7, nombre: 'Pedro Sanchez', categoria: 'Junior', peso: '70kg' }
   ];
 
 }
