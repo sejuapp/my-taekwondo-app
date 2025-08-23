@@ -33,9 +33,12 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/brackets-viewer/dist/brackets-viewer.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/brackets-viewer/dist/brackets-viewer.min.js"
+            ]
           },
           "configurations": {
             "production": {
