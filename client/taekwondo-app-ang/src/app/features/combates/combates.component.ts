@@ -1,50 +1,49 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { AllSharedImports } from '@app/shared/all-shared-imports';
-import { InMemoryDatabase } from '@app/storage/memory';
-import { BracketsManager } from 'brackets-manager';
-
 import { TournamentService } from '@app/services/tournament-service';
+import { AllSharedImports } from '@app/shared/all-shared-imports';
+
+import { GestionTorneoComponent } from '@app/shared/components/gestion-torneo/gestion-torneo.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
   selector: 'app-combates',
   imports: [
-    ...AllSharedImports
+    ...AllSharedImports,
+    GestionTorneoComponent
   ],
   templateUrl: './combates.component.html',
   styleUrl: './combates.component.scss'
 })
 export class CombatesComponent implements OnInit, AfterViewInit {
 
+  tournamentsData: any[] = [];
 
+  private viewerSubscription!: Subscription;
 
   constructor(
-    private tournamentService: TournamentService
+    private tournamentService: TournamentService,
   ) {
   }
 
   ngOnInit(): void {
     // Component initialization logic if needed
+
+
   }
 
   async ngAfterViewInit() {
 
-    const torneo1 = await this.tournamentService.createTournament();
-    const torneo2 = await this.tournamentService.createTournament2();
-
-    console.log('Torneo 1:', torneo1);
-    console.log('Torneo 2:', torneo2);
-
-    (window as any).bracketsViewer.render(torneo1, {
-      selector: '#bracket1'
-    });
-
-    (window as any).bracketsViewer.render(torneo2, {
-      selector: '#bracket2'
-    });
+    const torneo = await this.tournamentService.createTournament()
+    const torneoId = `T1`;
+    const torneo2 = await this.tournamentService.createTournament2()
+    const torneoId2 = `T2`;
 
 
+    this.tournamentsData.push({ torneoId: torneoId, torneoData: torneo });
+    this.tournamentsData.push({ torneoId: torneoId2, torneoData: torneo2 });
   }
+
 
 
 

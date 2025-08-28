@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ITorneoResponseData } from '@app/interface/torneo-data';
 import { BracketsManager } from 'brackets-manager';
 import { InMemoryDatabase } from 'brackets-memory-db';
 
@@ -6,7 +7,6 @@ import { InMemoryDatabase } from 'brackets-memory-db';
   providedIn: 'root',
 })
 export class TournamentService {
-
   TOURNAMENT_ID = 0;
 
   dataset8: any = {
@@ -27,22 +27,22 @@ export class TournamentService {
     ],
   };
 
-
   customTournament = {
     stages: [
       {
         id: 0,
         tournament_id: 0,
-        name: "Torneo 3 jugadores",
-        type: "single_elimination",
+        name: 'Torneo 3 jugadores',
+        type: 'single_elimination',
         number: 1,
         settings: {
-          seedOrdering: ["inner_outer"],
+          seedOrdering: ['inner_outer'],
           size: 4, // 3 reales + 1 BYE
           consolationFinal: false,
-          matchesChildCount: 0
-        }
-      }
+          matchesChildCount: 0,
+          locale: 'en',
+        },
+      },
     ],
     matches: [
       // Semifinal 1: Jugador 1 vs Jugador 2
@@ -54,7 +54,10 @@ export class TournamentService {
         round_id: 0,
         child_count: 1,
         status: 0,
-        opponent1: { id: 1, position: 1 },
+        opponent1: {
+          id: 1,
+          position: 1,
+        },
         opponent2: { id: 2, position: 2 },
       },
       // Semifinal 2: Jugador 3 vs BYE → Jugador 3 avanza directo
@@ -78,28 +81,38 @@ export class TournamentService {
         round_id: 1,
         child_count: 0,
         status: 0,
-        opponent1: null, // se llena con el ganador del match 0
-        opponent2: null, // se llena con el ganador del match 1
-      }
+        opponent1: { id: null, position: undefined },
+        opponent2: { id: null, position: undefined },
+      },
     ],
     matchGames: [],
     participants: [
-      { id: 1, name: "Jugador 1", tournament_id: 0 },
-      { id: 2, name: "Jugador 2", tournament_id: 0 },
-      { id: 3, name: "Jugador 3", tournament_id: 0 },
-      { id: 99, name: "BYE", tournament_id: 0 } // ficticio
-    ]
+      { id: 1, name: 'Sebastian Alejandro Gonzalez Montenegro' },
+      { id: 2, name: 'Julian David Gonzalez Montenegro' },
+      { id: 3, name: 'Rigoberto Daniel Pedraza Molina' },
+      { id: 99, name: 'No hay rival' }, // ficticio
+    ],
   };
 
-
-
-
-
   constructor() {
+    window.bracketsViewer.addLocale('es', {
+      common: {
+        round: 'Ronda',
+        bye: 'No hay rival',
+        seed: 'Clasificación',
+        final: 'Final',
+        grandFinal: 'Gran Final',
+        consolationFinal: 'Final de Consolación',
+      },
+      abbreviations: {
+        semifinal: 'Semifinal',
+        semifinals: 'Semifinales',
+        '3rdPlace': '3er Puesto',
+      },
+    });
   }
 
-  async createTournament(): Promise<any> {
-
+  async createTournament(): Promise<ITorneoResponseData> {
     const db = new InMemoryDatabase();
     const manager = new BracketsManager(db);
 
@@ -115,24 +128,30 @@ export class TournamentService {
       match_game: [],
     });
 
+    const seeding = undefined; //this.dataset8.roster.map((player: any) => player.name);
+    console.log('Seeding:', seeding);
+
     await manager.create.stage({
       name: 'Hola',
       tournamentId: this.TOURNAMENT_ID,
       type: 'single_elimination',
-      seeding: this.dataset8.roster.map((player: any) => player.name),
+      seeding: seeding,
       settings: {
         seedOrdering: ['inner_outer'],
         size: this.getNearestPowerOfTwo(this.dataset8.roster.length),
       },
     });
 
-    const data = await manager.get.stageData(0);
+    const data = await manager.export();
 
     return {
-      stages: data.stage,
-      matches: data.match,
-      matchGames: data.match_game,
-      participants: data.participant,
+      viewerData: {
+        stages: data.stage,
+        matches: data.match,
+        matchGames: data.match_game,
+        participants: data.participant,
+      }
+
     };
   }
 
@@ -143,6 +162,4 @@ export class TournamentService {
   createTournament2() {
     return this.customTournament;
   }
-
-
 }

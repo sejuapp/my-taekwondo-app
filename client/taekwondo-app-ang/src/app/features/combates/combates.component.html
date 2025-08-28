@@ -6,12 +6,10 @@
 
   <mat-card-content class="custom-content">
 
-    <div id="bracket1" class="brackets-viewer"></div>
+    <div *ngFor="let item of tournamentsData; let i = index">
+      <app-gestion-torneo [torneoId]="item.torneoId" [torneoData]="item.torneoData"></app-gestion-torneo>
+    </div>
 
-    <br>
-    -------------------------------------
-    <br>
-    <div id="bracket2" class="brackets-viewer"></div>
 
   </mat-card-content>
 
