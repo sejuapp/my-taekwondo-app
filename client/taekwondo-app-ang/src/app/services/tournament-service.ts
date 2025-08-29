@@ -112,7 +112,7 @@ export class TournamentService {
     });
   }
 
-  async createTournament(): Promise<ITorneoResponseData> {
+  async createTournament(): Promise<ITorneoResponseData | null> {
     const db = new InMemoryDatabase();
     const manager = new BracketsManager(db);
 
@@ -150,8 +150,7 @@ export class TournamentService {
         matches: data.match,
         matchGames: data.match_game,
         participants: data.participant,
-      }
-
+      },
     };
   }
 
@@ -160,6 +159,8 @@ export class TournamentService {
   }
 
   createTournament2() {
-    return this.customTournament;
+    return {
+      viewerData: this.customTournament
+    };
   }
 }

@@ -10,12 +10,12 @@ export class ViewerService {
   // private matchActionSource = new Subject<string>();
   // matchAction$ = this.matchActionSource.asObservable();
 
-  constructor() {}
+  constructor() { }
 
-  private getParticipantName(tournamentData: any, id?: number): string {
-    if (id === undefined) return this.NAME_NOT_EXIST;
+  private getParticipantName(tournamentData: any, id?: number): Participant | null {
+    if (id === undefined) return null;
     const participant = tournamentData.participants.find((p: Participant) => p.id === id);
-    return participant ? participant.name : this.NAME_NOT_EXIST;
+    return participant;
   }
 
   /**

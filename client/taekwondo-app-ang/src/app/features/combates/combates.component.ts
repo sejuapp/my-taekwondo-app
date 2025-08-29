@@ -19,8 +19,6 @@ export class CombatesComponent implements OnInit, AfterViewInit {
 
   tournamentsData: any[] = [];
 
-  private viewerSubscription!: Subscription;
-
   constructor(
     private tournamentService: TournamentService,
   ) {

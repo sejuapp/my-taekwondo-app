@@ -1,3 +1,4 @@
+import { BracketsManager } from "brackets-manager";
 import { Match, MatchGame, Participant, Stage } from "brackets-model";
 
 /**
