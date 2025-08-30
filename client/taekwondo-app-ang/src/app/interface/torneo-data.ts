@@ -1,4 +1,4 @@
-import { BracketsManager } from "brackets-manager";
+import { BracketsManager, Database } from "brackets-manager";
 import { Match, MatchGame, Participant, Stage } from "brackets-model";
 
 /**
@@ -9,6 +9,7 @@ export interface ITorneoCreateData {
 }
 
 export interface ITorneoResponseData {
+  exportDatabase : Database,
   viewerData: IViewerData;
 }
 

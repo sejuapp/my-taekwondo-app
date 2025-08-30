@@ -143,8 +143,10 @@ export class TournamentService {
     });
 
     const data = await manager.export();
+    //const data = await manager.get.stageData(0);
 
     return {
+      exportDatabase: data,
       viewerData: {
         stages: data.stage,
         matches: data.match,

@@ -5,6 +5,7 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
+import { IResponseSelectMatch } from '@app/interface/response-select';
 import { ViewerService } from '@app/services/viewer-service';
 import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar la desuscripción
 
@@ -41,7 +42,7 @@ export class GestionTorneoComponent
 
       // Suscribe la instancia actual del componente al Observable que le corresponde
       this.viewerSubscription = matchActionObservable.subscribe({
-        next: (message: string) => {
+        next: (message: IResponseSelectMatch) => {
           console.log(
             `[${this.torneoId}] Mensaje de acción recibido:`,
             message
