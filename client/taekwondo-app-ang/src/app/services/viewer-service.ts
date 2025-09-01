@@ -5,7 +5,6 @@ import { IResponseSelectMatch } from '@app/interface/response-select';
 
 @Injectable({ providedIn: 'root' })
 export class ViewerService {
-  private readonly NAME_NOT_EXIST = 'Bye';
 
   // Ya no necesitamos un Subject global
   // private matchActionSource = new Subject<string>();
@@ -32,16 +31,20 @@ export class ViewerService {
     selectorId: string,
     tournamentData: any
   ): Promise<Observable<IResponseSelectMatch>> {
-    const viewer = window.bracketsViewer;
-    const miSelector = selectorId.startsWith('#')
-      ? selectorId
-      : `#${selectorId}`;
-    const containerId = miSelector.replace('#', '');
-    await viewer.render(tournamentData, { selector: miSelector });
+
+    await this.viewerRender(selectorId, tournamentData);
 
     // 2. Retornamos la llamada a una nueva función que se encargará de los eventos
-    return this.setupBracketEvents(containerId, tournamentData);
+    return this.setupBracketEvents(selectorId, tournamentData);
   }
+
+  async viewerRender(selectorId: string, tournamentData: any) {
+    const viewer = window.bracketsViewer;
+
+    const miSelector = selectorId.startsWith('#') ? selectorId : `#${selectorId}`;
+    await viewer.render(tournamentData, { selector: miSelector, clear: true });
+  }
+
 
   private setupBracketEvents(
     containerId: string,

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { ITorneoResponseData } from '@app/interface/torneo-data';
 import { BracketsManager } from 'brackets-manager';
 import { InMemoryDatabase } from 'brackets-memory-db';
+import { JsonDatabase } from 'brackets-json-db';
+import { Match, Participant } from 'brackets-model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +25,6 @@ export class TournamentService {
       { id: 355, name: 'Seed 8' },
       { id: 356, name: 'Seed 9' },
       { id: 357, name: 'Seed 10' },
-      { id: 358, name: 'Seed 11' },
     ],
   };
 
@@ -54,11 +55,8 @@ export class TournamentService {
         round_id: 0,
         child_count: 1,
         status: 0,
-        opponent1: {
-          id: 1,
-          position: 1,
-        },
-        opponent2: { id: 2, position: 2 },
+        opponent1: undefined,
+        opponent2: undefined,
       },
       // Semifinal 2: Jugador 3 vs BYE → Jugador 3 avanza directo
       {
@@ -69,8 +67,8 @@ export class TournamentService {
         round_id: 0,
         child_count: 1,
         status: 1, // ya terminado
-        opponent1: { id: 3, position: 1 },
-        opponent2: { id: 99, position: 2 },
+        opponent1: undefined,
+        opponent2: undefined,
       },
       // Final
       {
@@ -114,7 +112,7 @@ export class TournamentService {
 
   async createTournament(): Promise<ITorneoResponseData | null> {
     const db = new InMemoryDatabase();
-    const manager = new BracketsManager(db);
+
 
     db.setData({
       participant: this.dataset8.roster.map((player: any) => ({
@@ -128,7 +126,9 @@ export class TournamentService {
       match_game: [],
     });
 
-    const seeding = undefined; //this.dataset8.roster.map((player: any) => player.name);
+    const manager = new BracketsManager(db);
+
+    const seeding = undefined; //this.dataset8.roster.map((player: any) => player.id);
     console.log('Seeding:', seeding);
 
     await manager.create.stage({
@@ -146,7 +146,6 @@ export class TournamentService {
     //const data = await manager.get.stageData(0);
 
     return {
-      exportDatabase: data,
       viewerData: {
         stages: data.stage,
         matches: data.match,
@@ -160,9 +159,115 @@ export class TournamentService {
     return Math.pow(2, Math.ceil(Math.log2(input)));
   }
 
-  createTournament2() {
+
+
+  async createTournament2() {
     return {
       viewerData: this.customTournament
     };
   }
+
+  async createTournament3(lstParticipants: any[], lstMatches: any[]) {
+
+    const customTournamentBase = JSON.parse(JSON.stringify(this.customTournament));
+
+    this.procesarListaParticipantes(lstParticipants);
+
+    if (lstMatches.length == 0) {
+      lstMatches = this.generarMatches(lstParticipants.length);
+    }
+
+    customTournamentBase.participants = lstParticipants;
+    customTournamentBase.matches = lstMatches;
+
+    return {
+      viewerData: customTournamentBase
+    };
+  }
+
+  procesarListaParticipantes(lstParticipants: any[]) {
+    // Si la lista tiene un número impar de participantes, agregar un "BYE"
+    if (lstParticipants.length % 2 !== 0) {
+      lstParticipants.push({ id: 0, name: 'No hay rival' }); // ID ficticio para "BYE"
+    }
+
+    return lstParticipants;
+  }
+
+
+  generarMatches(numParticipants: number) {
+    // Redondear hacia arriba al siguiente múltiplo de potencia de 2
+    const total = Math.pow(2, Math.ceil(Math.log2(numParticipants)));
+    const rounds = Math.log2(total);
+
+    const matches: any[] = [];
+    let matchId = 0;
+
+    for (let round = 0; round < rounds; round++) {
+      const matchesInRound = total / Math.pow(2, round + 1);
+
+      for (let m = 0; m < matchesInRound; m++) {
+        matches.push({
+          id: matchId++,
+          round_id: round,
+          stage_id: 0,
+          group_id: 0,
+          child_count: round < rounds - 1 ? 2 : 0,
+          status: 0,
+          opponent1: undefined,
+          opponent2: undefined,
+        });
+      }
+    }
+
+    return matches;
+  }
+
+
+  async createTournament4(lstParticipants: any[], lstMatch: Match[]): Promise<ITorneoResponseData | null> {
+
+    const db = new InMemoryDatabase();
+
+
+    db.setData({
+      participant: lstParticipants.map((player: any) => ({
+        ...player,
+        tournament_id: this.TOURNAMENT_ID,
+      })),
+      stage: [],
+      group: [],
+      round: [],
+      match: lstMatch,
+      match_game: [],
+    });
+
+    const manager = new BracketsManager(db);
+
+    const seeding = undefined; //this.dataset8.roster.map((player: any) => player.id);
+    console.log('Seeding:', seeding);
+
+    await manager.create.stage({
+      name: 'Hola xxx',
+      tournamentId: this.TOURNAMENT_ID,
+      type: 'single_elimination',
+      seeding: seeding,
+      settings: {
+        seedOrdering: ['inner_outer'],
+        size: this.getNearestPowerOfTwo(lstParticipants.length),
+      },
+    });
+
+    const data = await manager.export();
+    //const data = await manager.get.stageData(0);
+
+    return {
+      viewerData: {
+        stages: data.stage,
+        matches: data.match,
+        matchGames: data.match_game,
+        participants: data.participant,
+      },
+    };
+  }
+
 }

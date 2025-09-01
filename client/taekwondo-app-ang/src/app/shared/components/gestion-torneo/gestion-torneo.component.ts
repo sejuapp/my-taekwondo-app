@@ -16,13 +16,12 @@ import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar 
   styleUrl: './gestion-torneo.component.scss',
 })
 export class GestionTorneoComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+  implements OnInit, AfterViewInit, OnDestroy {
   @Input() torneoId: string = 'bracket-default';
   @Input() torneoData: any | null = null;
   private viewerSubscription: Subscription | null = null;
 
-  constructor(private viewerService: ViewerService) {}
+  constructor(private viewerService: ViewerService) { }
 
   ngOnInit(): void {
     console.log(
@@ -42,11 +41,24 @@ export class GestionTorneoComponent
 
       // Suscribe la instancia actual del componente al Observable que le corresponde
       this.viewerSubscription = matchActionObservable.subscribe({
-        next: (message: IResponseSelectMatch) => {
+        next: async (message: IResponseSelectMatch) => {
           console.log(
             `[${this.torneoId}] Mensaje de acción recibido:`,
             message
           );
+
+          const matchSeleccionado = this.torneoData.viewerData.matches[message.match.id];
+          matchSeleccionado.opponent1.id = 7;
+          matchSeleccionado.opponent1.position = 1;
+
+          matchSeleccionado.opponent2.id = 55;
+          matchSeleccionado.opponent2.position = 2;
+
+          window.bracketsViewer.render(this.torneoData.viewerData)
+
+          await this.viewerService.viewerRender(this.torneoId, this.torneoData.viewerData);
+
+
         },
         error: (err) => {
           console.error(

@@ -9,7 +9,6 @@ export interface ITorneoCreateData {
 }
 
 export interface ITorneoResponseData {
-  exportDatabase : Database,
   viewerData: IViewerData;
 }
 
