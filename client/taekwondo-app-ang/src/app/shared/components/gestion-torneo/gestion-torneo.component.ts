@@ -54,8 +54,6 @@ export class GestionTorneoComponent
           matchSeleccionado.opponent2.id = 55;
           matchSeleccionado.opponent2.position = 2;
 
-          window.bracketsViewer.render(this.torneoData.viewerData)
-
           await this.viewerService.viewerRender(this.torneoId, this.torneoData.viewerData);
 
 

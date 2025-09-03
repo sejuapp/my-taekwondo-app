@@ -29,13 +29,13 @@ export class ViewerService {
    */
   async initializeViewer(
     selectorId: string,
-    tournamentData: any
+    viewerData: any
   ): Promise<Observable<IResponseSelectMatch>> {
 
-    await this.viewerRender(selectorId, tournamentData);
+    await this.viewerRender(selectorId, viewerData);
 
     // 2. Retornamos la llamada a una nueva función que se encargará de los eventos
-    return this.setupBracketEvents(selectorId, tournamentData);
+    return this.setupBracketEvents(selectorId, viewerData);
   }
 
   async viewerRender(selectorId: string, tournamentData: any) {
@@ -48,7 +48,7 @@ export class ViewerService {
 
   private setupBracketEvents(
     containerId: string,
-    tournamentData: any
+    viewerData: any
   ): Observable<IResponseSelectMatch> {
     const container = document.getElementById(containerId);
     if (!container) {
@@ -65,24 +65,13 @@ export class ViewerService {
       if (!matchElement) return;
 
       const matchId = (matchElement as HTMLElement).dataset['matchId'];
-      const clickedMatch = tournamentData.matches.find(
+      const clickedMatch = viewerData.matches.find(
         (m: Match) => m.id === parseInt(matchId!)
       );
       if (!clickedMatch) return;
 
-      const opponent1Name = this.getParticipantName(
-        tournamentData,
-        clickedMatch.opponent1?.id
-      );
-      const opponent2Name = this.getParticipantName(
-        tournamentData,
-        clickedMatch.opponent2?.id
-      );
-
-      const message = `Acción en el partido ${clickedMatch.number} del torneo ${containerId} ::> [] ${opponent1Name} vs ${opponent2Name}  <[]`;
-
       // 4. Emite el mensaje a través del Subject local
-      matchActionSource.next({ match: clickedMatch, torneoData: tournamentData } as IResponseSelectMatch);
+      matchActionSource.next({ match: clickedMatch } as IResponseSelectMatch);
     };
 
     container.addEventListener('click', eventListener);
