@@ -12,17 +12,6 @@ export class ViewerService {
 
   constructor() { }
 
-  private getParticipantName(
-    tournamentData: any,
-    id?: number
-  ): Participant | null {
-    if (id === undefined) return null;
-    const participant = tournamentData.participants.find(
-      (p: Participant) => p.id === id
-    );
-    return participant;
-  }
-
   /**
    * Inicializa el visor de brackets y devuelve un Observable para los eventos de ese bracket específico.
    * @returns Un Observable que emite los mensajes de acción para este bracket.
