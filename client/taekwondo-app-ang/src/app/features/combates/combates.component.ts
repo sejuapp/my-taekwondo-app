@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { IGestionTorneoData, ITorneoCreateData } from '@app/interface/torneo-data';
 import { TournamentService } from '@app/services/tournament-service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
 
 import { GestionTorneoComponent } from '@app/shared/components/gestion-torneo/gestion-torneo.component';
+import { InputStage } from 'brackets-model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -12,7 +14,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './combates.component.scss',
 })
 export class CombatesComponent implements OnInit, AfterViewInit {
-  tournamentsData: any[] = [];
+  tournamentsData: IGestionTorneoData[] = [];
 
   constructor(private tournamentService: TournamentService) { }
 
@@ -33,25 +35,53 @@ export class CombatesComponent implements OnInit, AfterViewInit {
       { id: 55, name: 'Seed 2' },
       { id: 53, name: 'Seed 3' },
       { id: 523, name: 'Seed 4' },
-      { id: 123, name: 'Seed 5' },
+      /*{ id: 123, name: 'Seed 5' },
       { id: 353, name: 'Seed 6' },
       { id: 354, name: 'Seed 7' },
       { id: 355, name: 'Seed 8' },
       { id: 356, name: 'Seed 9' },
-      { id: 357, name: 'Seed 10' },
+      { id: 357, name: 'Seed 10' },*/
     ];
 
-    const torneo3 = await this.tournamentService.createTournament3(roster, []);
-    const torneoId3 = `T3`;
+    const roster2 = [
+      { id: 17, name: 'Participante 1' },
+      { id: 155, name: 'Participante 2' },
+      { id: 153, name: 'Participante 3' },
+      { id: 1523, name: 'Participante 4' },
+      { id: 1123, name: 'Participante 5' },
+      /*{ id: 353, name: 'Participante 6' },
+      { id: 354, name: 'Participante 7' },
+      { id: 355, name: 'Participante 8' },
+      { id: 356, name: 'Participante 9' },
+      { id: 357, name: 'Participante 10' },*/
+    ];
 
-     const torneo4 = await this.tournamentService.createTournament4(roster, []);
-    const torneoId4 = `T4`;
 
-    console.log('Torneo generado:', torneo4);
+    const stage: InputStage = {
+      tournamentId: 'T1',
+      name: 'Torneo 3 jugadores',
+      type: 'single_elimination',
+    }
 
-    //this.tournamentsData.push({ torneoId: torneoId, torneoData: torneo });
-    //this.tournamentsData.push({ torneoId: torneoId2, torneoData: torneo2 });
-    //this.tournamentsData.push({ torneoId: torneoId3, torneoData: torneo3 });
-    this.tournamentsData.push({ torneoId: torneoId4, torneoData: torneo4 });
+    const dataCreate: ITorneoCreateData = {
+      participants: roster2,
+      stage: stage
+    }
+
+    const torneo1 = await this.crearTorneo(dataCreate);
+    console.log('Torneo generado:', torneo1);
+
+    this.tournamentsData.push(torneo1);
+
+  }
+
+  async crearTorneo(dataCreate: ITorneoCreateData) : Promise<IGestionTorneoData> {
+    // Lógica para crear un nuevo torneo
+    const dataTorneo = await this.tournamentService.createTournament4(dataCreate, []);
+
+    return {
+      viewerData: dataTorneo?.viewerData ?? null,
+      dataCreate: dataCreate
+    };
   }
 }

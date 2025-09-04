@@ -1,15 +1,18 @@
-import { BracketsManager, Database } from "brackets-manager";
-import { Match, MatchGame, Participant, Stage } from "brackets-model";
+import { InputStage, Match, MatchGame, Participant, Stage } from "brackets-model";
 
 /**
  * Estructura de datos para crear el torneo
  */
 export interface ITorneoCreateData {
-
+  participants: any;
+  stage: InputStage
 }
 
-export interface ITorneoResponseData {
-  viewerData: IViewerData;
+/**
+ * Estructura de datos para la respuesta al crear el torneo con la liberia brackets
+ */
+export interface ITorneoViewerData {
+  viewerData: IViewerData | null;
 }
 
 /**
@@ -20,4 +23,9 @@ export interface IViewerData {
   matches: Match[],
   matchGames: MatchGame[],
   participants: Participant[],
+}
+
+export interface IGestionTorneoData {
+  viewerData: IViewerData | null,
+  dataCreate: ITorneoCreateData
 }

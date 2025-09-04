@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ITorneoResponseData } from '@app/interface/torneo-data';
+import {
+  ITorneoCreateData,
+  ITorneoViewerData,
+} from '@app/interface/torneo-data';
 import { BracketsManager } from 'brackets-manager';
 import { InMemoryDatabase } from 'brackets-memory-db';
 import { JsonDatabase } from 'brackets-json-db';
@@ -110,9 +113,8 @@ export class TournamentService {
     });
   }
 
-  async createTournament(): Promise<ITorneoResponseData | null> {
+  async createTournament(): Promise<ITorneoViewerData | null> {
     const db = new InMemoryDatabase();
-
 
     db.setData({
       participant: this.dataset8.roster.map((player: any) => ({
@@ -159,17 +161,16 @@ export class TournamentService {
     return Math.pow(2, Math.ceil(Math.log2(input)));
   }
 
-
-
   async createTournament2() {
     return {
-      viewerData: this.customTournament
+      viewerData: this.customTournament,
     };
   }
 
   async createTournament3(lstParticipants: any[], lstMatches: any[]) {
-
-    const customTournamentBase = JSON.parse(JSON.stringify(this.customTournament));
+    const customTournamentBase = JSON.parse(
+      JSON.stringify(this.customTournament)
+    );
 
     this.procesarListaParticipantes(lstParticipants);
 
@@ -181,7 +182,7 @@ export class TournamentService {
     customTournamentBase.matches = lstMatches;
 
     return {
-      viewerData: customTournamentBase
+      viewerData: customTournamentBase,
     };
   }
 
@@ -193,7 +194,6 @@ export class TournamentService {
 
     return lstParticipants;
   }
-
 
   generarMatches(numParticipants: number) {
     // Redondear hacia arriba al siguiente múltiplo de potencia de 2
@@ -223,11 +223,16 @@ export class TournamentService {
     return matches;
   }
 
+  async createTournament4(
+    dataCreate: ITorneoCreateData,
+    lstMatch: Match[]
+  ): Promise<ITorneoViewerData | null> {
 
-  async createTournament4(lstParticipants: any[], lstMatch: Match[]): Promise<ITorneoResponseData | null> {
+    const lstParticipants = dataCreate?.participants ?? [];
+
+    const stage = dataCreate.stage;
 
     const db = new InMemoryDatabase();
-
 
     db.setData({
       participant: lstParticipants.map((player: any) => ({
@@ -247,9 +252,9 @@ export class TournamentService {
     console.log('Seeding:', seeding);
 
     await manager.create.stage({
-      name: 'Hola xxx',
-      tournamentId: this.TOURNAMENT_ID,
-      type: 'single_elimination',
+      name: stage.name,
+      tournamentId: stage.tournamentId,
+      type: stage.type,
       seeding: seeding,
       settings: {
         seedOrdering: ['inner_outer'],
@@ -269,5 +274,4 @@ export class TournamentService {
       },
     };
   }
-
 }

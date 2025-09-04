@@ -17,7 +17,7 @@ export class ViewerService {
    * @returns Un Observable que emite los mensajes de acción para este bracket.
    */
   async initializeViewer(
-    selectorId: string,
+    selectorId: string | number,
     viewerData: any
   ): Promise<Observable<IResponseSelectMatch>> {
 
@@ -27,19 +27,23 @@ export class ViewerService {
     return this.setupBracketEvents(selectorId, viewerData);
   }
 
-  async viewerRender(selectorId: string, tournamentData: any) {
+  async viewerRender(selectorId: string | number, tournamentData: any) {
     const viewer = window.bracketsViewer;
 
-    const miSelector = selectorId.startsWith('#') ? selectorId : `#${selectorId}`;
+    const selectorStr = String(selectorId);
+
+    const miSelector = selectorStr.startsWith('#') ? selectorStr : `#${selectorStr}`;
     await viewer.render(tournamentData, { selector: miSelector, clear: true });
   }
 
 
   private setupBracketEvents(
-    containerId: string,
+    containerId: string | number,
     viewerData: any
   ): Observable<IResponseSelectMatch> {
-    const container = document.getElementById(containerId);
+
+    const containerIdStr = String(containerId);
+    const container = document.getElementById(containerIdStr);
     if (!container) {
       // Si el contenedor no existe, retornamos un Observable que no emite nada
       return new Observable<IResponseSelectMatch>();

@@ -5,10 +5,11 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
-  ViewChildren,
 } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { IItemBracketsSelect, IOpponentBracketSelect } from '@app/interface/item-brackets-select';
 import { IResponseSelectMatch } from '@app/interface/response-select';
+import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { ViewerService } from '@app/services/viewer-service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
 import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar la desuscripción
@@ -21,14 +22,14 @@ import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar 
 })
 export class GestionTorneoComponent
   implements OnInit, AfterViewInit, OnDestroy {
-  @Input() torneoId: string = 'bracket-default';
-  @Input() torneoData: any | null = null;
+  @Input() torneoId: number | string = 'bracket-default';
+  @Input() torneoData: IGestionTorneoData | null = null;
   private viewerSubscription: Subscription | null = null;
 
   @ViewChild('menuTrigger') menuTrigger!: MatMenuTrigger;
   menuTopLeft = { x: '0px', y: '0px' };
 
-  selectedMatchData: any;
+  itemBracketsSelect: IItemBracketsSelect | null = null;
 
   constructor(private viewerService: ViewerService) { }
 
@@ -56,7 +57,7 @@ export class GestionTorneoComponent
             message
           );
 
-          this.selectedMatchData = message;
+          this.itemBracketsSelect = this.mapItemSelect(message);
 
           this.menuTopLeft.x = message.coordinates.x + 'px';
           this.menuTopLeft.y = message.coordinates.y + 'px';
@@ -65,7 +66,7 @@ export class GestionTorneoComponent
           this.menuTrigger.openMenu();
 
           const matchSeleccionado =
-            this.torneoData.viewerData.matches[message.match.id];
+            this.torneoData?.viewerData?.matches[Number(message.match.id)];
           /*
           matchSeleccionado.opponent1.id = 7;
           matchSeleccionado.opponent1.position = 1;
@@ -76,7 +77,7 @@ export class GestionTorneoComponent
 
           await this.viewerService.viewerRender(
             this.torneoId,
-            this.torneoData.viewerData
+            this.torneoData?.viewerData
           );
         },
         error: (err) => {
@@ -89,12 +90,40 @@ export class GestionTorneoComponent
     }
   }
 
+  mapItemSelect(message: IResponseSelectMatch): IItemBracketsSelect {
+
+    const NOMBRE_SIN_ASIGNACION = 'Sin rival';
+
+    const opponent1Id = message.match.opponent1?.id;
+    const opponent2Id = message.match.opponent2?.id;
+
+    const p1Name = this.torneoData?.dataCreate.participants.find((p: any) => p.id === opponent1Id)?.name ?? NOMBRE_SIN_ASIGNACION;
+    const p2Name = this.torneoData?.dataCreate.participants.find((p: any) => p.id === opponent2Id)?.name ?? NOMBRE_SIN_ASIGNACION;
+
+
+    const op1: IOpponentBracketSelect = {
+      id: opponent1Id,
+      name: p1Name
+    }
+
+    const op2: IOpponentBracketSelect = {
+      id: opponent2Id,
+      name: p2Name
+    }
+
+    return {
+      match: message.match,
+      opponent1: op1,
+      opponent2: op2
+    }
+  }
+
   editMatch(): void {
-    console.log('Editando partido:', this.selectedMatchData);
+    console.log('Editando partido:');
   }
 
   viewDetails(): void {
-    console.log('Viendo detalles del partido:', this.selectedMatchData);
+    console.log('Viendo detalles del partido:');
   }
 
   ngOnDestroy(): void {
