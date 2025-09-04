@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs'; // Importa Subject y Observable
 import { Match, Participant } from 'brackets-model';
-import { IResponseSelectMatch } from '@app/interface/response-select';
+import { ICoordinates, IResponseSelectMatch } from '@app/interface/response-select';
 
 @Injectable({ providedIn: 'root' })
 export class ViewerService {
@@ -59,8 +59,11 @@ export class ViewerService {
       );
       if (!clickedMatch) return;
 
+      // Obtenemos las coordenadas del clic
+      const miCoordinates: ICoordinates = { x: event?.clientX ?? 0, y: event?.clientY ?? 0 };
+
       // 4. Emite el mensaje a través del Subject local
-      matchActionSource.next({ match: clickedMatch } as IResponseSelectMatch);
+      matchActionSource.next({ match: clickedMatch, coordinates: miCoordinates } as IResponseSelectMatch);
     };
 
     container.addEventListener('click', eventListener);

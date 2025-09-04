@@ -4,14 +4,18 @@ import {
   Input,
   OnInit,
   OnDestroy,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { IResponseSelectMatch } from '@app/interface/response-select';
 import { ViewerService } from '@app/services/viewer-service';
+import { AllSharedImports } from '@app/shared/all-shared-imports';
 import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar la desuscripción
 
 @Component({
   selector: 'app-gestion-torneo',
-  imports: [], // Asegúrate de incluir los imports necesarios
+  imports: [...AllSharedImports], // Asegúrate de incluir los imports necesarios
   templateUrl: './gestion-torneo.component.html',
   styleUrl: './gestion-torneo.component.scss',
 })
@@ -20,6 +24,11 @@ export class GestionTorneoComponent
   @Input() torneoId: string = 'bracket-default';
   @Input() torneoData: any | null = null;
   private viewerSubscription: Subscription | null = null;
+
+  @ViewChild('menuTrigger') menuTrigger!: MatMenuTrigger;
+  menuTopLeft = { x: '0px', y: '0px' };
+
+  selectedMatchData: any;
 
   constructor(private viewerService: ViewerService) { }
 
@@ -47,16 +56,28 @@ export class GestionTorneoComponent
             message
           );
 
-          const matchSeleccionado = this.torneoData.viewerData.matches[message.match.id];
+          this.selectedMatchData = message;
+
+          this.menuTopLeft.x = message.coordinates.x + 'px';
+          this.menuTopLeft.y = message.coordinates.y + 'px';
+
+          // Abre el menú en la posición del clic
+          this.menuTrigger.openMenu();
+
+          const matchSeleccionado =
+            this.torneoData.viewerData.matches[message.match.id];
+          /*
           matchSeleccionado.opponent1.id = 7;
           matchSeleccionado.opponent1.position = 1;
 
           matchSeleccionado.opponent2.id = 55;
           matchSeleccionado.opponent2.position = 2;
+          */
 
-          await this.viewerService.viewerRender(this.torneoId, this.torneoData.viewerData);
-
-
+          await this.viewerService.viewerRender(
+            this.torneoId,
+            this.torneoData.viewerData
+          );
         },
         error: (err) => {
           console.error(
@@ -66,6 +87,14 @@ export class GestionTorneoComponent
         },
       });
     }
+  }
+
+  editMatch(): void {
+    console.log('Editando partido:', this.selectedMatchData);
+  }
+
+  viewDetails(): void {
+    console.log('Viendo detalles del partido:', this.selectedMatchData);
   }
 
   ngOnDestroy(): void {

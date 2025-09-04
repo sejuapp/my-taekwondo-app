@@ -1,1 +1,13 @@
 <div [id]="torneoId" class="brackets-viewer"></div>
+
+<br>
+
+<button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="menu1"
+  [ngStyle]="{ position: 'fixed', top: menuTopLeft.y, left: menuTopLeft.x, opacity: 0, pointerEvents: 'none' }">
+</button>
+
+<mat-menu #menu1="matMenu" yPosition="above" xPosition="after">
+  <div style="padding: 8px;">
+    {{ selectedMatchData | json }}
+  </div>
+</mat-menu>
