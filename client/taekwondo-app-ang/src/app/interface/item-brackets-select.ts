@@ -2,8 +2,7 @@ import { Id, Match } from "brackets-model";
 
 export interface IItemBracketsSelect {
   match: Match;
-  opponent1 : IOpponentBracketSelect;
-  opponent2 : IOpponentBracketSelect;
+  customOpponents : IOpponentBracketSelect[];
 }
 
 

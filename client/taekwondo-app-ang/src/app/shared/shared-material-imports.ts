@@ -12,6 +12,7 @@ import { MatCustomCardComponent } from '@app/wrapper/custom-card.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 export const SharedMaterialImports = [
   MatButtonModule,
@@ -27,5 +28,6 @@ export const SharedMaterialImports = [
   MatCustomCardComponent,
   DragDropModule,
   FlexLayoutModule,
-  MatMenuModule
+  MatMenuModule,
+  MatExpansionModule
 ];

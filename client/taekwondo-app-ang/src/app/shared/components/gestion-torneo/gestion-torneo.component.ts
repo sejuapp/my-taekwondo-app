@@ -9,7 +9,10 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { IItemBracketsSelect, IOpponentBracketSelect } from '@app/interface/item-brackets-select';
+import {
+  IItemBracketsSelect,
+  IOpponentBracketSelect,
+} from '@app/interface/item-brackets-select';
 import { IResponseSelectMatch } from '@app/interface/response-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { ViewerService } from '@app/services/viewer-service';
@@ -35,7 +38,10 @@ export class GestionTorneoComponent
 
   itemBracketsSelect: IItemBracketsSelect | null = null;
 
-  constructor(private viewerService: ViewerService, private dialog: MatDialog) { }
+  constructor(
+    private viewerService: ViewerService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     console.log(
@@ -96,31 +102,38 @@ export class GestionTorneoComponent
   }
 
   mapItemSelect(message: IResponseSelectMatch): IItemBracketsSelect {
-
-    const NOMBRE_SIN_ASIGNACION = 'Sin rival';
+    const NOMBRE_SIN_ASIGNACION = 'Sin asignar';
 
     const opponent1Id = message.match.opponent1?.id;
     const opponent2Id = message.match.opponent2?.id;
 
-    const p1Name = this.torneoData?.dataCreate.participants.find((p: any) => p.id === opponent1Id)?.name ?? NOMBRE_SIN_ASIGNACION;
-    const p2Name = this.torneoData?.dataCreate.participants.find((p: any) => p.id === opponent2Id)?.name ?? NOMBRE_SIN_ASIGNACION;
+    const p1Name =
+      this.torneoData?.dataCreate.participants.find(
+        (p: any) => p.id === opponent1Id
+      )?.name ?? NOMBRE_SIN_ASIGNACION;
 
+    const p2Name =
+      this.torneoData?.dataCreate.participants.find(
+        (p: any) => p.id === opponent2Id
+      )?.name ?? NOMBRE_SIN_ASIGNACION;
 
     const op1: IOpponentBracketSelect = {
       id: opponent1Id,
-      name: p1Name
-    }
+      name: p1Name,
+    };
 
     const op2: IOpponentBracketSelect = {
       id: opponent2Id,
-      name: p2Name
-    }
+      name: p2Name,
+    };
 
     return {
       match: message.match,
-      opponent1: op1,
-      opponent2: op2
-    }
+      customOpponents: [
+        op1,
+        op2
+      ]
+    };
   }
 
   editMatch(): void {
@@ -141,10 +154,14 @@ export class GestionTorneoComponent
     this.dialog.open(this.dialogTemplate, {
       position: {
         top: this.menuTopLeft.y,
-        left: this.menuTopLeft.x
+        left: this.menuTopLeft.x,
       },
       //backdropClass: 'custom-backdrop', // opcional para personalizar fondo
       //panelClass: 'custom-dialog-panel' // opcional para estilos del cuadro
     });
   }
+
+onAsignarCompetidor(opponent: any, index: number) {
+  console.log(`Oponente [${index + 1}] ->`, JSON.stringify(opponent, null, 2));
+}
 }
