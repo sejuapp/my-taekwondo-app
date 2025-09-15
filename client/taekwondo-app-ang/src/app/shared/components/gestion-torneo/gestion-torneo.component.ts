@@ -5,7 +5,9 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
+  TemplateRef,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { IItemBracketsSelect, IOpponentBracketSelect } from '@app/interface/item-brackets-select';
 import { IResponseSelectMatch } from '@app/interface/response-select';
@@ -22,6 +24,8 @@ import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar 
 })
 export class GestionTorneoComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('dialogTemplate') dialogTemplate!: TemplateRef<any>;
+
   @Input() torneoId: number | string = 'bracket-default';
   @Input() torneoData: IGestionTorneoData | null = null;
   private viewerSubscription: Subscription | null = null;
@@ -31,7 +35,7 @@ export class GestionTorneoComponent
 
   itemBracketsSelect: IItemBracketsSelect | null = null;
 
-  constructor(private viewerService: ViewerService) { }
+  constructor(private viewerService: ViewerService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     console.log(
@@ -64,6 +68,7 @@ export class GestionTorneoComponent
 
           // Abre el menú en la posición del clic
           this.menuTrigger.openMenu();
+          //this.abrirDialog();
 
           const matchSeleccionado =
             this.torneoData?.viewerData?.matches[Number(message.match.id)];
@@ -130,5 +135,16 @@ export class GestionTorneoComponent
     if (this.viewerSubscription) {
       this.viewerSubscription.unsubscribe();
     }
+  }
+
+  abrirDialog() {
+    this.dialog.open(this.dialogTemplate, {
+      position: {
+        top: this.menuTopLeft.y,
+        left: this.menuTopLeft.x
+      },
+      //backdropClass: 'custom-backdrop', // opcional para personalizar fondo
+      //panelClass: 'custom-dialog-panel' // opcional para estilos del cuadro
+    });
   }
 }

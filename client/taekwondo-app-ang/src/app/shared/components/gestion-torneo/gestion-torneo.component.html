@@ -6,8 +6,11 @@
   [ngStyle]="{ position: 'fixed', top: menuTopLeft.y, left: menuTopLeft.x, opacity: 0, pointerEvents: 'none' }">
 </button>
 
-<mat-menu #menu1="matMenu" yPosition="above" xPosition="after">
-  <div style="padding: 8px;">
-    {{itemBracketsSelect?.opponent1?.name}} vs {{itemBracketsSelect?.opponent2?.name}}
+<mat-menu #menu1="matMenu" yPosition="above" xPosition="after" [overlapTrigger]="false">
+  <div class="menu-content" (click)="$event.stopPropagation()">
+    <p>
+      {{ itemBracketsSelect?.opponent1?.name }} vs
+      {{ itemBracketsSelect?.opponent2?.name }}
+    </p>
   </div>
 </mat-menu>
