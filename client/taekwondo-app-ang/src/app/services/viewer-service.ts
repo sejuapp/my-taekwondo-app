@@ -54,7 +54,12 @@ export class ViewerService {
 
     // 3. Añade el listener de eventos
     const eventListener = async (event: MouseEvent) => {
-      const matchElement = (event.target as HTMLElement).closest('.match');
+      // Solo si el click fue dentro de opponents.connect-previous
+      const opponentsElement = (event.target as HTMLElement).closest('.opponents');
+      if (!opponentsElement) return;
+
+      // Ahora sí buscamos el match al que pertenece
+      const matchElement = opponentsElement.closest('.match');
       if (!matchElement) return;
 
       const matchId = (matchElement as HTMLElement).dataset['matchId'];
@@ -66,9 +71,13 @@ export class ViewerService {
       // Obtenemos las coordenadas del clic
       const miCoordinates: ICoordinates = { x: event?.clientX ?? 0, y: event?.clientY ?? 0 };
 
-      // 4. Emite el mensaje a través del Subject local
-      matchActionSource.next({ match: clickedMatch, coordinates: miCoordinates } as IResponseSelectMatch);
+      // Emitimos el evento
+      matchActionSource.next({
+        match: clickedMatch,
+        coordinates: miCoordinates
+      } as IResponseSelectMatch);
     };
+
 
     container.addEventListener('click', eventListener);
 
