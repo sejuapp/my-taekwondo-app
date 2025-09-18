@@ -24,8 +24,11 @@
 
         <section>
           <div>
+            @if(!existeGanador()){
             <button mat-flat-button color="primary" (click)="onAsignarCompetidor(opponent, i)">Asignar
               competidor</button>
+            }
+
           </div>
         </section>
       </mat-expansion-panel>

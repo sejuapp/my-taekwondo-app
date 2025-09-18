@@ -1,3 +1,4 @@
+import { Id } from 'brackets-model';
 import {
   AfterViewInit,
   Component,
@@ -6,6 +7,7 @@ import {
   OnDestroy,
   ViewChild,
   TemplateRef,
+  signal,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -27,6 +29,8 @@ import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar 
 })
 export class GestionTorneoComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  NOMBRE_SIN_ASIGNACION = 'Sin asignar';
+
   @ViewChild('dialogTemplate') dialogTemplate!: TemplateRef<any>;
 
   @Input() torneoId: number | string = 'bracket-default';
@@ -37,6 +41,10 @@ export class GestionTorneoComponent
   menuTopLeft = { x: '0px', y: '0px' };
 
   itemBracketsSelect: IItemBracketsSelect | null = null;
+
+  participantsMap: Map<any, any> = new Map<number, any>();
+
+  existeGanador = signal<boolean>(true);
 
   constructor(
     private viewerService: ViewerService,
@@ -52,6 +60,10 @@ export class GestionTorneoComponent
   async ngAfterViewInit(): Promise<void> {
     if (this.torneoData) {
       console.log(`[${this.torneoId}] Inicializando visor...`);
+
+      this.participantsMap = new Map(
+        this.torneoData.dataCreate.participants.map((p: any) => [p.id, p])
+      );
 
       // Espera a que el servicio devuelva el Observable
       const matchActionObservable = await this.viewerService.initializeViewer(
@@ -102,38 +114,26 @@ export class GestionTorneoComponent
   }
 
   mapItemSelect(message: IResponseSelectMatch): IItemBracketsSelect {
-    const NOMBRE_SIN_ASIGNACION = 'Sin asignar';
-
-    const opponent1Id = message.match.opponent1?.id;
-    const opponent2Id = message.match.opponent2?.id;
-
-    const p1Name =
-      this.torneoData?.dataCreate.participants.find(
-        (p: any) => p.id === opponent1Id
-      )?.name ?? NOMBRE_SIN_ASIGNACION;
-
-    const p2Name =
-      this.torneoData?.dataCreate.participants.find(
-        (p: any) => p.id === opponent2Id
-      )?.name ?? NOMBRE_SIN_ASIGNACION;
-
     const op1: IOpponentBracketSelect = {
-      id: opponent1Id,
-      name: p1Name,
+      id: message.match.opponent1?.id,
+      name: this.getOpponentName(message.match.opponent1?.id),
     };
 
     const op2: IOpponentBracketSelect = {
-      id: opponent2Id,
-      name: p2Name,
+      id: message.match.opponent2?.id,
+      name: this.getOpponentName(message.match.opponent2?.id),
     };
 
     return {
       match: message.match,
-      customOpponents: [
-        op1,
-        op2
-      ]
+      customOpponents: [op1, op2],
     };
+  }
+
+  getOpponentName(opponentId: any) : string {
+    return opponentId
+      ? this.participantsMap.get(opponentId)?.name ?? this.NOMBRE_SIN_ASIGNACION
+      : this.NOMBRE_SIN_ASIGNACION;
   }
 
   editMatch(): void {
@@ -161,7 +161,20 @@ export class GestionTorneoComponent
     });
   }
 
+  validarExisteGanador(){
+    const c1 = this.itemBracketsSelect?.match.opponent1?.result ?? '';
+    const c2 = this.itemBracketsSelect?.match.opponent2?.result ?? '';
+
+    const validacion =  c1 !='' || c2 !='';
+
+    this.existeGanador.set(validacion);
+
+  }
+
   onAsignarCompetidor(opponent: any, index: number) {
-    console.log(`Oponente [${index + 1}] ->`, JSON.stringify(opponent, null, 2));
+    console.log(
+      `Oponente [${index + 1}] ->`,
+      JSON.stringify(opponent, null, 2)
+    );
   }
 }

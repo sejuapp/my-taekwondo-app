@@ -29,7 +29,7 @@ export const dataTorneo = {
         "peso": 18
       },
       "bracket": {
-        "id": 1,
+        "id": 2,
         "name": "Julian Gonzalez"
       }
     },
@@ -43,7 +43,7 @@ export const dataTorneo = {
         "peso": 100
       },
       "bracket": {
-        "id": 1,
+        "id": 3,
         "name": "Ivan Gonzalez"
       }
     },
@@ -57,8 +57,22 @@ export const dataTorneo = {
         "peso": 22
       },
       "bracket": {
-        "id": 1,
+        "id": 4,
         "name": "Juan Rojas"
+      }
+    },
+    {
+      "persona": {
+        "nombre1": "Victor",
+        "nombre2": "Felipe",
+        "apellido1": "Fonseca",
+        "apellido2": "Rojas",
+        "fechaNacimiento": "2013-09-10",
+        "peso": 25
+      },
+      "bracket": {
+        "id": 5,
+        "name": "Victor Fonseca"
       }
     }
   ]

@@ -248,8 +248,7 @@ export class TournamentService {
 
     const manager = new BracketsManager(db);
 
-    const seeding = undefined; //this.dataset8.roster.map((player: any) => player.id);
-    console.log('Seeding:', seeding);
+    const seeding = lstParticipants.map((player: any) => player);
 
     await manager.create.stage({
       name: stage.name,
