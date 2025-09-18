@@ -161,7 +161,7 @@ export class GestionTorneoComponent
     });
   }
 
-onAsignarCompetidor(opponent: any, index: number) {
-  console.log(`Oponente [${index + 1}] ->`, JSON.stringify(opponent, null, 2));
-}
+  onAsignarCompetidor(opponent: any, index: number) {
+    console.log(`Oponente [${index + 1}] ->`, JSON.stringify(opponent, null, 2));
+  }
 }

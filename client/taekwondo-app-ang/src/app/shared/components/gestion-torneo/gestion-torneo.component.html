@@ -12,21 +12,23 @@
 
 <mat-menu #menu1="matMenu" yPosition="above" xPosition="after" [overlapTrigger]="false" class="custom-menu-panel">
   <div class="menu-content" (click)="$event.stopPropagation()">
-<mat-accordion multi>
-  <mat-expansion-panel *ngFor="let opponent of this.itemBracketsSelect?.customOpponents; let i = index" expanded="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title> Oponente {{ i + 1 }} </mat-panel-title>
-      <mat-panel-description>
-        {{ opponent?.name }}
-      </mat-panel-description>
-    </mat-expansion-panel-header>
+    <mat-accordion multi>
+      <mat-expansion-panel *ngFor="let opponent of this.itemBracketsSelect?.customOpponents; let i = index"
+        expanded="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Oponente {{ i + 1 }} </mat-panel-title>
+          <mat-panel-description>
+            {{ opponent?.name }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
 
-    <section>
-      <div>
-        <button mat-flat-button color="primary" (click)="onAsignarCompetidor(opponent, i)">Asignar competidor</button>
-      </div>
-    </section>
-  </mat-expansion-panel>
-</mat-accordion>
+        <section>
+          <div>
+            <button mat-flat-button color="primary" (click)="onAsignarCompetidor(opponent, i)">Asignar
+              competidor</button>
+          </div>
+        </section>
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
 </mat-menu>

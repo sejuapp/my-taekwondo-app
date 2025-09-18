@@ -54,7 +54,7 @@ export class ViewerService {
 
     // 3. Añade el listener de eventos
     const eventListener = async (event: MouseEvent) => {
-      // Solo si el click fue dentro de opponents.connect-previous
+      // Solo si el click fue dentro de opponents
       const opponentsElement = (event.target as HTMLElement).closest('.opponents');
       if (!opponentsElement) return;
 
