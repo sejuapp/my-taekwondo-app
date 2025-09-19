@@ -80,6 +80,7 @@ export class GestionTorneoComponent
           );
 
           this.itemBracketsSelect = this.mapItemSelect(message);
+          this.validarExisteGanador();
 
           this.menuTopLeft.x = message.coordinates.x + 'px';
           this.menuTopLeft.y = message.coordinates.y + 'px';
@@ -90,18 +91,10 @@ export class GestionTorneoComponent
 
           const matchSeleccionado =
             this.torneoData?.viewerData?.matches[Number(message.match.id)];
-          /*
-          matchSeleccionado.opponent1.id = 7;
-          matchSeleccionado.opponent1.position = 1;
 
-          matchSeleccionado.opponent2.id = 55;
-          matchSeleccionado.opponent2.position = 2;
-          */
+          //await this.refrescarRender();
 
-          await this.viewerService.viewerRender(
-            this.torneoId,
-            this.torneoData?.viewerData
-          );
+
         },
         error: (err) => {
           console.error(
@@ -111,6 +104,13 @@ export class GestionTorneoComponent
         },
       });
     }
+  }
+
+  async refrescarRender() {
+    await this.viewerService.viewerRender(
+      this.torneoId,
+      this.torneoData?.viewerData
+    );
   }
 
   mapItemSelect(message: IResponseSelectMatch): IItemBracketsSelect {
@@ -130,7 +130,7 @@ export class GestionTorneoComponent
     };
   }
 
-  getOpponentName(opponentId: any) : string {
+  getOpponentName(opponentId: any): string {
     return opponentId
       ? this.participantsMap.get(opponentId)?.name ?? this.NOMBRE_SIN_ASIGNACION
       : this.NOMBRE_SIN_ASIGNACION;
@@ -161,11 +161,11 @@ export class GestionTorneoComponent
     });
   }
 
-  validarExisteGanador(){
+  validarExisteGanador() {
     const c1 = this.itemBracketsSelect?.match.opponent1?.result ?? '';
     const c2 = this.itemBracketsSelect?.match.opponent2?.result ?? '';
 
-    const validacion =  c1 !='' || c2 !='';
+    const validacion = c1 != '' || c2 != '';
 
     this.existeGanador.set(validacion);
 

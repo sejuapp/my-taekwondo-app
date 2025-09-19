@@ -42,7 +42,7 @@ export class CombatesComponent implements OnInit, AfterViewInit {
 
   async crearTorneo(dataCreate: ITorneoCreateData): Promise<IGestionTorneoData> {
     // Lógica para crear un nuevo torneo
-    const dataTorneo = await this.tournamentService.createTournament4(dataCreate, []);
+    const dataTorneo = await this.tournamentService.createTournament(dataCreate, []);
 
     return {
       viewerData: dataTorneo?.viewerData ?? null,
