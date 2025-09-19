@@ -9,7 +9,7 @@ import {
   TemplateRef,
   signal,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import {
   IItemBracketsSelect,
@@ -20,6 +20,7 @@ import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { ViewerService } from '@app/services/viewer-service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
 import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar la desuscripción
+import { ReasignarCompetidorComponent } from '@app/shared/components/modales/reasignar-competidor/reasignar-competidor.component';
 
 @Component({
   selector: 'app-gestion-torneo',
@@ -32,6 +33,7 @@ export class GestionTorneoComponent
   NOMBRE_SIN_ASIGNACION = 'Sin asignar';
 
   @ViewChild('dialogTemplate') dialogTemplate!: TemplateRef<any>;
+  private dialogRef?: MatDialogRef<ReasignarCompetidorComponent>;
 
   @Input() torneoId: number | string = 'bracket-default';
   @Input() torneoData: IGestionTorneoData | null = null;
@@ -117,11 +119,13 @@ export class GestionTorneoComponent
     const op1: IOpponentBracketSelect = {
       id: message.match.opponent1?.id,
       name: this.getOpponentName(message.match.opponent1?.id),
+      result: message.match.opponent1?.result ?? null
     };
 
     const op2: IOpponentBracketSelect = {
       id: message.match.opponent2?.id,
       name: this.getOpponentName(message.match.opponent2?.id),
+      result: message.match.opponent2?.result ?? null
     };
 
     return {
@@ -175,6 +179,39 @@ export class GestionTorneoComponent
     console.log(
       `Oponente [${index + 1}] ->`,
       JSON.stringify(opponent, null, 2)
+    );
+  }
+
+  onCambiarCompetidor(opponent: any, index: number) {
+    this.console(opponent);
+
+    this.dialogRef = this.dialog.open(ReasignarCompetidorComponent, {
+      width: '90vw',       // ocupa el 90% del ancho de la pantalla
+      maxWidth: '600px',   // pero nunca más ancho de 600px
+      height: 'auto',      // ajusta la altura al contenido
+      maxHeight: '90vh',   // nunca más alto que el 90% de la pantalla
+      disableClose: true,
+      data: {
+        usuario: 'Juan Pérez',
+        materias: ['Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias']
+      }
+    });
+
+    this.dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado) {
+        console.log('resultado ::> ', resultado);
+      }
+    });
+  }
+
+  close(): void {
+    this.dialogRef?.close();
+  }
+
+  console(data: any) {
+    console.log(
+      `Data ->`,
+      JSON.stringify(data, null, 2)
     );
   }
 }

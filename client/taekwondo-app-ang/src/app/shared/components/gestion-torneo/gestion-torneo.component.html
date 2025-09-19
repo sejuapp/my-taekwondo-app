@@ -13,21 +13,23 @@
 <mat-menu #menu1="matMenu" yPosition="above" xPosition="after" [overlapTrigger]="false" class="custom-menu-panel">
   <div class="menu-content" (click)="$event.stopPropagation()">
     <mat-accordion multi>
-      <mat-expansion-panel *ngFor="let opponent of this.itemBracketsSelect?.customOpponents; let i = index"
+      <mat-expansion-panel *ngFor="let item of this.itemBracketsSelect?.customOpponents; let i = index"
         expanded="true">
         <mat-expansion-panel-header>
           <mat-panel-title> Oponente {{ i + 1 }} </mat-panel-title>
           <mat-panel-description>
-            {{ opponent?.name }}
+            {{ item?.name }} - {{ item?.result }}
           </mat-panel-description>
         </mat-expansion-panel-header>
 
         <section>
           <div>
             @if(!existeGanador()){
-            <button mat-flat-button color="primary" (click)="onAsignarCompetidor(opponent, i)">Asignar
+            <button mat-flat-button color="primary" (click)="onAsignarCompetidor(item, i)">Asignar
               competidor</button>
             }
+
+            <button mat-flat-button color="primary" (click)="onCambiarCompetidor(item, i)">Cambiar competidor</button>
 
           </div>
         </section>

@@ -1,4 +1,4 @@
-import { Id, Match } from "brackets-model";
+import { Id, Match, Result } from "brackets-model";
 
 export interface IItemBracketsSelect {
   match: Match;
@@ -9,4 +9,5 @@ export interface IItemBracketsSelect {
 export interface IOpponentBracketSelect {
   id: Id | null | undefined;
   name: string;
+  result: Result | null;
 }
