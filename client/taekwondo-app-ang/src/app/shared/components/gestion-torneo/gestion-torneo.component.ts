@@ -19,12 +19,13 @@ import { IResponseSelectMatch } from '@app/interface/response-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { ViewerService } from '@app/services/viewer-service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
-import { Subscription } from 'rxjs'; // Necesitamos Subscription para gestionar la desuscripción
-import { ReasignarCompetidorComponent } from '@app/shared/components/modales/reasignar-competidor/reasignar-competidor.component';
+import { Subscription } from 'rxjs';
+import { OpcionesSeleccionComponent } from '@app/shared/components/modales/opciones-seleccion/opciones-seleccion.component';
+import { BASE_DIALOG_CONFIG } from 'src/global-dialog-config';
 
 @Component({
   selector: 'app-gestion-torneo',
-  imports: [...AllSharedImports], // Asegúrate de incluir los imports necesarios
+  imports: [...AllSharedImports],
   templateUrl: './gestion-torneo.component.html',
   styleUrl: './gestion-torneo.component.scss',
 })
@@ -32,21 +33,15 @@ export class GestionTorneoComponent
   implements OnInit, AfterViewInit, OnDestroy {
   NOMBRE_SIN_ASIGNACION = 'Sin asignar';
 
-  @ViewChild('dialogTemplate') dialogTemplate!: TemplateRef<any>;
-  private dialogRef?: MatDialogRef<ReasignarCompetidorComponent>;
+  private dialogRefOpcionesSeleccion?: MatDialogRef<OpcionesSeleccionComponent>;
 
   @Input() torneoId: number | string = 'bracket-default';
   @Input() torneoData: IGestionTorneoData | null = null;
   private viewerSubscription: Subscription | null = null;
 
-  @ViewChild('menuTrigger') menuTrigger!: MatMenuTrigger;
-  menuTopLeft = { x: '0px', y: '0px' };
-
   itemBracketsSelect: IItemBracketsSelect | null = null;
 
   participantsMap: Map<any, any> = new Map<number, any>();
-
-  existeGanador = signal<boolean>(true);
 
   constructor(
     private viewerService: ViewerService,
@@ -82,21 +77,13 @@ export class GestionTorneoComponent
           );
 
           this.itemBracketsSelect = this.mapItemSelect(message);
-          this.validarExisteGanador();
 
-          this.menuTopLeft.x = message.coordinates.x + 'px';
-          this.menuTopLeft.y = message.coordinates.y + 'px';
-
-          // Abre el menú en la posición del clic
-          this.menuTrigger.openMenu();
-          //this.abrirDialog();
+          this.onOpcionesSeleccion();
 
           const matchSeleccionado =
             this.torneoData?.viewerData?.matches[Number(message.match.id)];
 
           //await this.refrescarRender();
-
-
         },
         error: (err) => {
           console.error(
@@ -119,13 +106,13 @@ export class GestionTorneoComponent
     const op1: IOpponentBracketSelect = {
       id: message.match.opponent1?.id,
       name: this.getOpponentName(message.match.opponent1?.id),
-      result: message.match.opponent1?.result ?? null
+      result: message.match.opponent1?.result ?? null,
     };
 
     const op2: IOpponentBracketSelect = {
       id: message.match.opponent2?.id,
       name: this.getOpponentName(message.match.opponent2?.id),
-      result: message.match.opponent2?.result ?? null
+      result: message.match.opponent2?.result ?? null,
     };
 
     return {
@@ -140,78 +127,31 @@ export class GestionTorneoComponent
       : this.NOMBRE_SIN_ASIGNACION;
   }
 
-  editMatch(): void {
-    console.log('Editando partido:');
-  }
-
-  viewDetails(): void {
-    console.log('Viendo detalles del partido:');
-  }
-
   ngOnDestroy(): void {
     if (this.viewerSubscription) {
       this.viewerSubscription.unsubscribe();
     }
   }
 
-  abrirDialog() {
-    this.dialog.open(this.dialogTemplate, {
-      position: {
-        top: this.menuTopLeft.y,
-        left: this.menuTopLeft.x,
-      },
-      //backdropClass: 'custom-backdrop', // opcional para personalizar fondo
-      //panelClass: 'custom-dialog-panel' // opcional para estilos del cuadro
-    });
+  console(data: any) {
+    console.log(`Data ->`, JSON.stringify(data, null, 2));
   }
 
-  validarExisteGanador() {
-    const c1 = this.itemBracketsSelect?.match.opponent1?.result ?? '';
-    const c2 = this.itemBracketsSelect?.match.opponent2?.result ?? '';
 
-    const validacion = c1 != '' || c2 != '';
 
-    this.existeGanador.set(validacion);
+  onOpcionesSeleccion() {
 
-  }
-
-  onAsignarCompetidor(opponent: any, index: number) {
-    console.log(
-      `Oponente [${index + 1}] ->`,
-      JSON.stringify(opponent, null, 2)
-    );
-  }
-
-  onCambiarCompetidor(opponent: any, index: number) {
-    this.console(opponent);
-
-    this.dialogRef = this.dialog.open(ReasignarCompetidorComponent, {
-      width: '90vw',       // ocupa el 90% del ancho de la pantalla
-      maxWidth: '600px',   // pero nunca más ancho de 600px
-      height: 'auto',      // ajusta la altura al contenido
-      maxHeight: '90vh',   // nunca más alto que el 90% de la pantalla
-      disableClose: true,
+    this.dialogRefOpcionesSeleccion = this.dialog.open(OpcionesSeleccionComponent, {
+      ...BASE_DIALOG_CONFIG,
       data: {
-        usuario: 'Juan Pérez',
-        materias: ['Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias']
+        itemBracketsSelect: this.itemBracketsSelect
       }
     });
 
-    this.dialogRef.afterClosed().subscribe(resultado => {
+    this.dialogRefOpcionesSeleccion.afterClosed().subscribe(resultado => {
       if (resultado) {
         console.log('resultado ::> ', resultado);
       }
     });
-  }
-
-  close(): void {
-    this.dialogRef?.close();
-  }
-
-  console(data: any) {
-    console.log(
-      `Data ->`,
-      JSON.stringify(data, null, 2)
-    );
   }
 }
