@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, Inject, signal } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IItemBracketsSelect } from '@app/interface/item-brackets-select';
+import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
+import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 
 @Component({
   selector: 'app-opciones-seleccion',
@@ -10,7 +12,9 @@ import { AllSharedImports } from '@app/shared/all-shared-imports';
   styleUrl: './opciones-seleccion.component.scss',
 })
 export class OpcionesSeleccionComponent implements AfterViewInit {
+
   itemBracketsSelect: IItemBracketsSelect | null = null;
+  torneoData: IGestionTorneoData | null = null;
 
   existeGanador = signal<boolean>(true);
 
@@ -19,6 +23,7 @@ export class OpcionesSeleccionComponent implements AfterViewInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.itemBracketsSelect = data.itemBracketsSelect;
+    this.torneoData = data.torneoData;
   }
   async ngAfterViewInit(): Promise<void> {
     this.validarExisteGanador();
@@ -40,26 +45,8 @@ export class OpcionesSeleccionComponent implements AfterViewInit {
     );
   }
 
-  onCambiarCompetidor(opponent: any, index: number) {
-    /*
-    this.dialogRef = this.dialog.open(ReasignarCompetidorComponent, {
-      width: '90vw',       // ocupa el 90% del ancho de la pantalla
-      maxWidth: '600px',   // pero nunca más ancho de 600px
-      height: 'auto',      // ajusta la altura al contenido
-      maxHeight: '90vh',   // nunca más alto que el 90% de la pantalla
-      disableClose: true,
-      data: {
-        usuario: 'Juan Pérez',
-        materias: ['Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias', 'Matemáticas', 'Lengua', 'Historia', 'Ciencias']
-      }
-    });
-
-    this.dialogRef.afterClosed().subscribe(resultado => {
-      if (resultado) {
-        console.log('resultado ::> ', resultado);
-      }
-    });
-    */
+  onCambiarCompetidor() {
+    this.dialogRef.close(AccionCompetidorEnum.CAMBIAR);
   }
 
   cerrar(): void {

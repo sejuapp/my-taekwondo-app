@@ -1,7 +1,7 @@
 <mat-card-custom>
   <mat-card-header>
-    <mat-card-title>Emparejamiento</mat-card-title>
-    <mat-card-subtitle>Se realiza el emparejamiento de los competidores</mat-card-subtitle>
+    <mat-card-title>Opciones del match</mat-card-title>
+    <mat-card-subtitle>Se muestran las diferentes opciones que existen para el match seleccionado</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <mat-dialog-content>
@@ -23,7 +23,7 @@
                 competidor</button>
               }
 
-              <button mat-flat-button color="primary" (click)="onCambiarCompetidor(item, i)">Cambiar competidor</button>
+              <button mat-flat-button color="primary" (click)="onCambiarCompetidor()">Cambiar competidor</button>
 
             </div>
           </section>

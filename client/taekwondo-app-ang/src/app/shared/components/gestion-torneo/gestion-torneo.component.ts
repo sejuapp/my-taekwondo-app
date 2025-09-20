@@ -22,6 +22,9 @@ import { AllSharedImports } from '@app/shared/all-shared-imports';
 import { Subscription } from 'rxjs';
 import { OpcionesSeleccionComponent } from '@app/shared/components/modales/opciones-seleccion/opciones-seleccion.component';
 import { BASE_DIALOG_CONFIG } from 'src/global-dialog-config';
+import { DialogService } from '@app/shared/services/dialog.service';
+import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
+import { ReasignarCompetidorComponent } from '@app/shared/components/modales/reasignar-competidor/reasignar-competidor.component';
 
 @Component({
   selector: 'app-gestion-torneo',
@@ -33,8 +36,6 @@ export class GestionTorneoComponent
   implements OnInit, AfterViewInit, OnDestroy {
   NOMBRE_SIN_ASIGNACION = 'Sin asignar';
 
-  private dialogRefOpcionesSeleccion?: MatDialogRef<OpcionesSeleccionComponent>;
-
   @Input() torneoId: number | string = 'bracket-default';
   @Input() torneoData: IGestionTorneoData | null = null;
   private viewerSubscription: Subscription | null = null;
@@ -45,7 +46,8 @@ export class GestionTorneoComponent
 
   constructor(
     private viewerService: ViewerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -137,21 +139,39 @@ export class GestionTorneoComponent
     console.log(`Data ->`, JSON.stringify(data, null, 2));
   }
 
-
-
   onOpcionesSeleccion() {
 
-    this.dialogRefOpcionesSeleccion = this.dialog.open(OpcionesSeleccionComponent, {
-      ...BASE_DIALOG_CONFIG,
-      data: {
-        itemBracketsSelect: this.itemBracketsSelect
+    const data = {
+      itemBracketsSelect: this.itemBracketsSelect,
+      torneoData: this.torneoData
+    }
+
+    const dialogRef = this._dialogService.open(OpcionesSeleccionComponent, data);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+        if (AccionCompetidorEnum.CAMBIAR == result) {
+          this.openModalCambiar();
+        }
       }
     });
 
-    this.dialogRefOpcionesSeleccion.afterClosed().subscribe(resultado => {
-      if (resultado) {
-        console.log('resultado ::> ', resultado);
-      }
+  }
+
+  openModalCambiar() {
+
+    const data = {
+      itemBracketsSelect: this.itemBracketsSelect,
+      torneoData: this.torneoData
+    }
+
+    const dialogRef = this._dialogService.open(ReasignarCompetidorComponent, data);
+
+    dialogRef.afterClosed().subscribe(result => {
+       if (result === 'ABRIR') {
+      this.onOpcionesSeleccion(); // <- reabrir la primera modal
+    }
     });
   }
 }
