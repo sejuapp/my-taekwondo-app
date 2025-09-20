@@ -1,0 +1,11 @@
+.custom-content {
+  padding-top: 20px !important; /* espacio superior */
+  padding-bottom: 25px !important; /* espacio inferior */
+}
+
+.custom-actions {
+  display: flex;
+  gap: 12px; /* espacio uniforme entre botones */
+  justify-content: flex-end; /* alinea a la derecha */
+  padding-bottom: 20px !important; /* espacio inferior */
+}
