@@ -4,7 +4,7 @@ export const dataTorneo = {
     name: 'Torneo 3 jugadores',
     type: 'single_elimination',
   },
-  participantes: [
+  participants: [
     {
       "persona": {
         "nombre1": "Sebastian",
@@ -12,7 +12,9 @@ export const dataTorneo = {
         "apellido1": "Gonzalez",
         "apellido2": "Montenegro",
         "fechaNacimiento": "2013-10-25",
-        "peso": 22
+        "peso": 22,
+        "cinturon" : "Amarillo",
+        "altura" : 110
       },
       "bracket": {
         "id": 1,
@@ -26,7 +28,9 @@ export const dataTorneo = {
         "apellido1": "Gonzalez",
         "apellido2": "Montenegro",
         "fechaNacimiento": "2018-10-25",
-        "peso": 18
+        "peso": 18,
+        "cinturon" : "Amarillo",
+        "altura" : 110
       },
       "bracket": {
         "id": 2,
@@ -40,7 +44,9 @@ export const dataTorneo = {
         "apellido1": "Gonzalez",
         "apellido2": "Agulo",
         "fechaNacimiento": "1988-10-25",
-        "peso": 100
+        "peso": 100,
+        "cinturon" : "Amarillo",
+        "altura" : 110
       },
       "bracket": {
         "id": 3,
@@ -54,7 +60,9 @@ export const dataTorneo = {
         "apellido1": "Rojas",
         "apellido2": "Estupiñan",
         "fechaNacimiento": "2013-09-10",
-        "peso": 22
+        "peso": 22,
+        "cinturon" : "Amarillo",
+        "altura" : 110
       },
       "bracket": {
         "id": 4,
@@ -68,7 +76,9 @@ export const dataTorneo = {
         "apellido1": "Fonseca",
         "apellido2": "Rojas",
         "fechaNacimiento": "2013-09-10",
-        "peso": 25
+        "peso": 25,
+        "cinturon" : "Amarillo",
+        "altura" : 110
       },
       "bracket": {
         "id": 5,
