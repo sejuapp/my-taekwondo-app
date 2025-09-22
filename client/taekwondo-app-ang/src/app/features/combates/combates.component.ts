@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, signal } from '@angular/core';
 import { IGestionTorneoData, ITorneoCreateData } from '@app/interface/torneo-data';
 import { dataTorneo } from '@app/json/torneo';
+import { dataTorneo2 } from '@app/json/torneo2';
 import { TournamentService } from '@app/services/tournament-service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
 
@@ -13,40 +14,43 @@ import { InputStage } from 'brackets-model';
   templateUrl: './combates.component.html',
   styleUrl: './combates.component.scss',
 })
-export class CombatesComponent implements OnInit, AfterViewInit {
-  tournamentsData: IGestionTorneoData[] = [];
+export class CombatesComponent implements OnInit {
+
+  tournamentsData = signal<IGestionTorneoData[]>([]);
 
   constructor(private tournamentService: TournamentService) { }
 
   ngOnInit(): void {
-    // Component initialization logic if needed
+    this.cargarTorneos();
   }
 
-  async ngAfterViewInit() {
-    const miTorneo = dataTorneo;
+  private async cargarTorneos() {
+    this.agregarTorneo(dataTorneo);
 
-    const participant = miTorneo.participantes;
-    const stage = <InputStage>miTorneo.stage;
+    setTimeout(() => {
+      //this.agregarTorneo(dataTorneo2);
+    }, 5000)
 
+  }
+
+  async agregarTorneo(miTorneo: any) {
+    const nuevoTorneo = await this.crearTorneo(miTorneo);
+    console.log('Torneo generado ::> ', nuevoTorneo);
+
+    this.tournamentsData.update(prev => [...prev, nuevoTorneo]);
+  }
+
+  private async crearTorneo(miTorneo: any): Promise<IGestionTorneoData> {
     const dataCreate: ITorneoCreateData = {
-      participants: participant.map(m => m.bracket),
-      stage: stage
-    }
+      participants: miTorneo.participants.map((m: any) => m.bracket),
+      stage: <InputStage>miTorneo.stage
+    };
 
-    const torneo1 = await this.crearTorneo(dataCreate);
-    console.log('Torneo generado:', torneo1);
-
-    this.tournamentsData.push(torneo1);
-
-  }
-
-  async crearTorneo(dataCreate: ITorneoCreateData): Promise<IGestionTorneoData> {
-    // Lógica para crear un nuevo torneo
     const dataTorneo = await this.tournamentService.createTournament(dataCreate, []);
-
     return {
       viewerData: dataTorneo?.viewerData ?? null,
-      dataCreate: dataCreate
+      miTorneo
     };
   }
+
 }

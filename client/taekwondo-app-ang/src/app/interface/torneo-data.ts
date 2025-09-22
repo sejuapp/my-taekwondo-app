@@ -4,7 +4,7 @@ import { InputStage, Match, MatchGame, Participant, Stage } from "brackets-model
  * Estructura de datos para crear el torneo
  */
 export interface ITorneoCreateData {
-  participants: any;
+  participants: any[];
   stage: InputStage
 }
 
@@ -27,5 +27,5 @@ export interface IViewerData {
 
 export interface IGestionTorneoData {
   viewerData: IViewerData | null,
-  dataCreate: ITorneoCreateData
+  miTorneo: any
 }

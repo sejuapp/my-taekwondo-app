@@ -5,10 +5,14 @@
   </mat-card-header>
 
   <mat-card-content class="custom-content">
-    <div *ngFor="let item of tournamentsData; let i = index">
-      <app-gestion-torneo [torneoId]="item.dataCreate.stage.tournamentId" [torneoData]="item"></app-gestion-torneo>
-    </div>
+    @for (item of tournamentsData(); track item.miTorneo.stage.tournamentId) {
+      <app-gestion-torneo
+        [torneoId]="item.miTorneo.stage.tournamentId"
+        [torneoData]="item">
+      </app-gestion-torneo>
+    }
   </mat-card-content>
 
-  <mat-card-actions class="custom-actions"> </mat-card-actions>
+  <mat-card-actions class="custom-actions">
+  </mat-card-actions>
 </mat-card-custom>

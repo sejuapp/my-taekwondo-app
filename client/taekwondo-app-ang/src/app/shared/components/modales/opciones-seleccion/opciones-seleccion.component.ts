@@ -1,6 +1,16 @@
-import { AfterViewInit, Component, Inject, signal } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { IItemBracketsSelect } from '@app/interface/item-brackets-select';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  Inject,
+  signal,
+} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  IItemBracketsSelect,
+  IOpcionSeleccionar,
+  IOpponentBracketSelect,
+} from '@app/interface/item-brackets-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
 import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
@@ -11,42 +21,38 @@ import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
   templateUrl: './opciones-seleccion.component.html',
   styleUrl: './opciones-seleccion.component.scss',
 })
-export class OpcionesSeleccionComponent implements AfterViewInit {
+export class OpcionesSeleccionComponent {
+  itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
+  torneoData = signal<IGestionTorneoData | null>(null);
 
-  itemBracketsSelect: IItemBracketsSelect | null = null;
-  torneoData: IGestionTorneoData | null = null;
+  existeGanador = computed(() => {
+    const match = this.itemBracketsSelect()?.match;
+    if (!match) return false;
 
-  existeGanador = signal<boolean>(true);
+    return Boolean(match.opponent1?.result || match.opponent2?.result);
+  });
 
   constructor(
     public dialogRef: MatDialogRef<OpcionesSeleccionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.itemBracketsSelect = data.itemBracketsSelect;
-    this.torneoData = data.torneoData;
-  }
-  async ngAfterViewInit(): Promise<void> {
-    this.validarExisteGanador();
+    this.itemBracketsSelect.set(data.itemBracketsSelect);
+    this.torneoData.set(data.torneoData);
   }
 
-  validarExisteGanador() {
-    const c1 = this.itemBracketsSelect?.match.opponent1?.result ?? '';
-    const c2 = this.itemBracketsSelect?.match.opponent2?.result ?? '';
-
-    const validacion = c1 != '' || c2 != '';
-
-    this.existeGanador.set(validacion);
-  }
-
-  onAsignarCompetidor(opponent: any, index: number) {
+  onAsignarCompetidor(opponent: IOpponentBracketSelect, index: number) {
     console.log(
       `Oponente [${index + 1}] ->`,
       JSON.stringify(opponent, null, 2)
     );
   }
 
-  onCambiarCompetidor() {
-    this.dialogRef.close(AccionCompetidorEnum.CAMBIAR);
+  onCambiarCompetidor(oponente: IOpponentBracketSelect) {
+    const data: IOpcionSeleccionar = {
+      accion: AccionCompetidorEnum.CAMBIAR,
+      idOpponent: oponente.match.id,
+    };
+    this.dialogRef.close(data);
   }
 
   cerrar(): void {
