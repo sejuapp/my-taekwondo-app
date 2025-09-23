@@ -13,6 +13,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatChipsModule } from '@angular/material/chips';
 
 export const SharedMaterialImports = [
   MatButtonModule,
@@ -29,5 +31,7 @@ export const SharedMaterialImports = [
   DragDropModule,
   FlexLayoutModule,
   MatMenuModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatListModule,
+  MatChipsModule
 ];

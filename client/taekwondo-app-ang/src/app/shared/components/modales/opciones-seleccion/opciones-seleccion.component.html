@@ -11,29 +11,25 @@
     <mat-dialog-content>
       <mat-accordion multi>
         @for (item of itemBracketsSelect()?.customOpponents; track $index; let i = $index) {
-          <mat-expansion-panel expanded="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title> Oponente {{ i + 1 }} </mat-panel-title>
-              <mat-panel-description>
-                {{ item?.match?.name }} - {{ item?.match?.result }}
-              </mat-panel-description>
-            </mat-expansion-panel-header>
+        <mat-expansion-panel expanded="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Oponente {{ i + 1 }} </mat-panel-title>
+            <mat-panel-description>
+              {{ item?.match?.name }} - {{ item?.match?.result }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
 
-            <section>
-              <div>
-                @if (!existeGanador()) {
-                  <button mat-flat-button color="primary"
-                          (click)="onAsignarCompetidor(item, i)">
-                    Asignar competidor
-                  </button>
-                }
-                <button mat-flat-button color="primary"
-                        (click)="onCambiarCompetidor(item)">
-                  Cambiar competidor
-                </button>
-              </div>
-            </section>
-          </mat-expansion-panel>
+          <section>
+
+            <div>
+              @if(item?.participant){
+              <button mat-flat-button color="primary" (click)="onCambiarCompetidor(item)">
+                Cambiar competidor
+              </button>
+              }
+            </div>
+          </section>
+        </mat-expansion-panel>
         }
       </mat-accordion>
     </mat-dialog-content>

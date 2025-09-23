@@ -40,13 +40,6 @@ export class OpcionesSeleccionComponent {
     this.torneoData.set(data.torneoData);
   }
 
-  onAsignarCompetidor(opponent: IOpponentBracketSelect, index: number) {
-    console.log(
-      `Oponente [${index + 1}] ->`,
-      JSON.stringify(opponent, null, 2)
-    );
-  }
-
   onCambiarCompetidor(oponente: IOpponentBracketSelect) {
     const data: IOpcionSeleccionar = {
       accion: AccionCompetidorEnum.CAMBIAR,

@@ -5,5 +5,6 @@ export const BASE_DIALOG_CONFIG: MatDialogConfig = {
   maxWidth: '600px',   // pero nunca más ancho de 600px
   height: 'auto',      // ajusta la altura al contenido
   maxHeight: '90vh',   // nunca más alto que el 90% de la pantalla
-  disableClose: true
+  disableClose: true,
+  autoFocus: false,
 };

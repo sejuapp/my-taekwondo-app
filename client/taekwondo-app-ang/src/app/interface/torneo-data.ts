@@ -1,3 +1,4 @@
+import { IInfoTorneoCategoria } from "@app/interface/request/info-torneo-categoria";
 import { InputStage, Match, MatchGame, Participant, Stage } from "brackets-model";
 
 /**
@@ -27,5 +28,5 @@ export interface IViewerData {
 
 export interface IGestionTorneoData {
   viewerData: IViewerData | null,
-  miTorneo: any
+  miTorneoCategoria: IInfoTorneoCategoria
 }

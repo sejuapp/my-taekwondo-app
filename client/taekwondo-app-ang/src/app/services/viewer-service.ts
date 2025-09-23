@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { fromEvent, Observable, EMPTY } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { Match } from 'brackets-model';
+
 import {
   ICoordinates,
   IResponseSelectMatch,
@@ -22,7 +22,7 @@ export class ViewerService {
     viewerData: any
   ): Promise<Observable<IResponseSelectMatch>> {
     await this.viewerRender(selectorId, viewerData);
-    return this.setupBracketEvents(selectorId, viewerData);
+    return this.setupBracketEvents(selectorId);
   }
 
   /**
@@ -33,19 +33,19 @@ export class ViewerService {
   async viewerRender(selectorId: string | number, tournamentData: any) {
     const viewer = window.bracketsViewer;
     const selectorStr = String(selectorId);
-    const miSelector = selectorStr.startsWith('#') ? selectorStr : `#${selectorStr}`;
+    const miSelector = selectorStr.startsWith('#')
+      ? selectorStr
+      : `#${selectorStr}`;
     await viewer.render(tournamentData, { selector: miSelector, clear: true });
   }
 
   /**
    * Configura el listener de eventos de clic en el contenedor.
    * @param containerId El ID del contenedor.
-   * @param viewerData Los datos del torneo para buscar el match.
    * @returns Un Observable que emite los datos del match seleccionado.
    */
   private setupBracketEvents(
-    containerId: string | number,
-    viewerData: any
+    containerId: string | number
   ): Observable<IResponseSelectMatch> {
     const container = document.getElementById(String(containerId));
     if (!container) {
@@ -54,7 +54,7 @@ export class ViewerService {
     }
 
     return fromEvent<MouseEvent>(container, 'click').pipe(
-      map((event) => this.processClickEvent(event, viewerData)),
+      map((event) => this.processClickEvent(event)),
       filter((value): value is IResponseSelectMatch => value !== null)
     );
   }
@@ -65,31 +65,44 @@ export class ViewerService {
    * @param viewerData Los datos del torneo.
    * @returns Los datos del match seleccionado o `null` si no se encuentra.
    */
-  private processClickEvent(
-    event: MouseEvent,
-    viewerData: any
-  ): IResponseSelectMatch | null {
-    const targetElement = event.target as HTMLElement;
-    const opponentsElement = targetElement.closest('.opponents');
+  private processClickEvent(event: MouseEvent): IResponseSelectMatch | null {
+    // 1. Encontrar el contenedor del participante en el que se hizo clic
+    const participantElement = (event.target as HTMLElement).closest(
+      '.participant'
+    );
+
+    // Si no se hizo clic en un participante (o un elemento dentro de uno), salimos
+    if (!participantElement) {
+      return null;
+    }
+
+    // 2. Encontrar el contenedor de los oponentes y del match a partir del participante
+    const opponentsElement = participantElement.closest('.opponents');
     if (!opponentsElement) return null;
 
     const matchElement = opponentsElement.closest('.match');
     if (!matchElement) return null;
 
+    // 3. Obtener el ID del match
     const matchId = matchElement.getAttribute('data-match-id');
     const parsedMatchId = matchId ? parseInt(matchId, 10) : NaN;
     if (isNaN(parsedMatchId)) return null;
 
-    const clickedMatch = viewerData.matches?.find(
-      (m: Match) => m.id === parsedMatchId
+    // 4. Obtener el ID del oponente directamente desde el elemento del participante
+    const participantId = participantElement.getAttribute(
+      'data-participant-id'
     );
-    if (!clickedMatch) return null;
+    const parsedOpponentId = participantId ? parseInt(participantId, 10) : null;
 
     const coordinates: ICoordinates = {
       x: event.clientX,
       y: event.clientY,
     };
 
-    return { match: clickedMatch, coordinates };
+    return {
+      idMatch: parsedMatchId,
+      idOpponent: parsedOpponentId,
+      coordinates,
+    };
   }
 }

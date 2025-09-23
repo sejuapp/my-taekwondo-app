@@ -1,5 +1,5 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ParticipantResult } from 'brackets-model';
+import { MatchResults, ParticipantResult } from 'brackets-model';
 import {
   AfterViewInit,
   Component,
@@ -22,6 +22,8 @@ import { DialogService } from '@app/shared/services/dialog.service';
 import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 import { ReasignarCompetidorComponent } from '@app/shared/components/modales/reasignar-competidor/reasignar-competidor.component';
 import { filter } from 'rxjs';
+import { IParticipantCategoria } from '@app/interface/request/info-torneo-categoria';
+import { IdOpponent } from '@app/type/type-brackets';
 
 @Component({
   selector: 'app-gestion-torneo',
@@ -57,7 +59,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     // Guardamos los participantes en el mapa para buscarlos rápido por id
     this.participantsMap.set(
       new Map(
-        this.torneoData.miTorneo?.participants.map((p: any) => [
+        this.torneoData.miTorneoCategoria?.participants.map((p: any) => [
           p.bracket.id,
           p,
         ])
@@ -111,11 +113,17 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
    * Mapea el mensaje de respuesta a un item seleccionable
    */
   private mapItemSelect(message: IResponseSelectMatch): IItemBracketsSelect {
+    const match = this.torneoData?.viewerData?.matches[message.idMatch];
+    if (!match) {
+      throw new Error(
+        `Match con ID ${message.idMatch} no encontrado en los datos del torneo.`
+      );
+    }
     return {
-      match: message.match,
+      match: match,
       customOpponents: [
-        this.buildOpponent(message?.match?.opponent1),
-        this.buildOpponent(message.match?.opponent2),
+        this.buildOpponent(match?.opponent1),
+        this.buildOpponent(match?.opponent2),
       ],
     };
   }
@@ -178,7 +186,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       )
       .subscribe((result: IOpcionSeleccionar) => {
         if (result.accion === AccionCompetidorEnum.CAMBIAR) {
-          this.openModalCambiar(result);
+          this.openModalReasignar(result);
         }
       });
   }
@@ -186,7 +194,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   /**
    * Abre el modal para reasignar un competidor
    */
-  openModalCambiar(result: IOpcionSeleccionar) {
+  openModalReasignar(result: IOpcionSeleccionar) {
     const data = {
       idOpponent: result.idOpponent,
       itemBracketsSelect: this.itemBracketsSelect(),
@@ -201,8 +209,67 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     dialogRef
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        console.log(`[${this.torneoId}] 🔄 Reasignación result:`, result);
+      .subscribe((nuevoOponente: IParticipantCategoria | null) => {
+        if (!nuevoOponente) {
+          console.log(`[${this.torneoId}] ❌ Reasignación cancelada`);
+          return;
+        }
+
+        console.log(`[${this.torneoId}] 🔄 Reasignación result:`, nuevoOponente);
+        this.reasignar(data.idOpponent, nuevoOponente);
       });
+  }
+
+  private reasignar(idOponenteAnterior: IdOpponent, nuevoOponente: IParticipantCategoria) {
+
+    const roundId = this.itemBracketsSelect()?.match?.round_id ?? 0;
+    const matches = this.torneoData?.viewerData?.matches ?? [];
+    const nuevoOponenteId = nuevoOponente.bracket.id;
+
+    if (matches.length === 0) {
+      return;
+    }
+
+    const matchesOponenteAnterior = matches.filter(m => {
+      const isRelevantRound = roundId === 0 || m.round_id >= roundId;
+      return isRelevantRound && (m.opponent1?.id === idOponenteAnterior || m.opponent2?.id === idOponenteAnterior);
+    });
+
+    const matchesNuevoOponente = matches.filter(m => {
+      const isRelevantRound = roundId === 0 || m.round_id >= roundId;
+      return isRelevantRound && (m.opponent1?.id === nuevoOponenteId || m.opponent2?.id === nuevoOponenteId);
+    });
+
+    if (!matchesOponenteAnterior || !matchesNuevoOponente) {
+      return;
+    }
+
+    // Intercambiar IDs de los oponentes.
+    matchesOponenteAnterior.forEach(item => {
+      this.intercambiarOponente(item, idOponenteAnterior, nuevoOponenteId);
+    })
+
+    matchesNuevoOponente.forEach(item => {
+      this.intercambiarOponente(item, nuevoOponenteId, idOponenteAnterior);
+    })
+
+    this.refrescarRender();
+  }
+
+  /**
+   * Método de ayuda para intercambiar el ID de un oponente en un partido.
+   * Valida que los oponentes no sean null antes de la asignación.
+   */
+  private intercambiarOponente(
+    match: MatchResults,
+    idActual: IdOpponent,
+    idNuevo: IdOpponent
+  ) {
+    // Los siguientes if/else ya manejan la posibilidad de que el ID sea null o undefined.
+    if (idNuevo && match?.opponent1 && match.opponent1?.id === idActual) {
+      match.opponent1.id = idNuevo;
+    } else if (idNuevo && match?.opponent2 && match.opponent2?.id === idActual) {
+      match.opponent2.id = idNuevo;
+    }
   }
 }

@@ -1,12 +1,15 @@
-export const dataTorneo = {
+import { IInfoTorneoCategoria } from "@app/interface/request/info-torneo-categoria";
+
+export const dataTorneo: IInfoTorneoCategoria = {
   stage: {
     tournamentId: 'T1',
-    name: 'Torneo 3 jugadores',
+    name: ' ',
     type: 'single_elimination',
   },
   participants: [
     {
       "persona": {
+        "id": 1,
         "nombre1": "Sebastian",
         "nombre2": "Alejandro",
         "apellido1": "Gonzalez",
@@ -23,6 +26,7 @@ export const dataTorneo = {
     },
     {
       "persona": {
+        "id": 2,
         "nombre1": "Julian",
         "nombre2": "David",
         "apellido1": "Gonzalez",
@@ -39,6 +43,7 @@ export const dataTorneo = {
     },
     {
       "persona": {
+        "id": 3,
         "nombre1": "Ivan",
         "nombre2": "David",
         "apellido1": "Gonzalez",
@@ -55,6 +60,7 @@ export const dataTorneo = {
     },
     {
       "persona": {
+        "id": 4,
         "nombre1": "Juan",
         "nombre2": "Carlos",
         "apellido1": "Rojas",
@@ -71,6 +77,7 @@ export const dataTorneo = {
     },
     {
       "persona": {
+        "id": 5,
         "nombre1": "Victor",
         "nombre2": "Felipe",
         "apellido1": "Fonseca",

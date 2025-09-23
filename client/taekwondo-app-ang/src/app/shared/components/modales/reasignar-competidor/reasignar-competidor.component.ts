@@ -1,6 +1,7 @@
 import { Component, Inject, computed, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IItemBracketsSelect } from '@app/interface/item-brackets-select';
+import { IParticipantCategoria } from '@app/interface/request/info-torneo-categoria';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
 import { IdOpponent } from '@app/type/type-brackets';
@@ -44,8 +45,13 @@ export class ReasignarCompetidorComponent {
 
     // Crear el mapa solo una vez
     this.participantsMap = new Map(
-      this.torneoData?.miTorneo?.participants.map((p: any) => [p.bracket.id, p])
+      this.torneoData?.miTorneoCategoria?.participants.map((p: any) => [p.bracket.id, p])
     );
+  }
+
+  onCambiarCompetidor(item: IParticipantCategoria) {
+    console.log('Cambiar por ->', item);
+    this.dialogRef.close(item);
   }
 
   cerrar(): void {
