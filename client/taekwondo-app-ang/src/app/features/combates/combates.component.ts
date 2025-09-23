@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { IGestionTorneoData, ITorneoCreateData } from '@app/interface/torneo-data';
 import { dataTorneo } from '@app/json/torneo';
 import { dataTorneo2 } from '@app/json/torneo2';
@@ -28,7 +28,7 @@ export class CombatesComponent implements OnInit {
     this.agregarTorneo(dataTorneo);
 
     setTimeout(() => {
-      //this.agregarTorneo(dataTorneo2);
+      this.agregarTorneo(dataTorneo2);
     }, 5000)
 
   }

@@ -1,16 +1,13 @@
-import { Id, ParticipantResult } from 'brackets-model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ParticipantResult } from 'brackets-model';
 import {
   AfterViewInit,
   Component,
   Input,
   OnInit,
-  OnDestroy,
-  ViewChild,
-  TemplateRef,
   signal,
+  DestroyRef,
 } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatMenuTrigger } from '@angular/material/menu';
 import {
   IItemBracketsSelect,
   IOpcionSeleccionar,
@@ -20,12 +17,11 @@ import { IResponseSelectMatch } from '@app/interface/response-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { ViewerService } from '@app/services/viewer-service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
-import { Subscription } from 'rxjs';
 import { OpcionesSeleccionComponent } from '@app/shared/components/modales/opciones-seleccion/opciones-seleccion.component';
-import { BASE_DIALOG_CONFIG } from 'src/global-dialog-config';
 import { DialogService } from '@app/shared/services/dialog.service';
 import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 import { ReasignarCompetidorComponent } from '@app/shared/components/modales/reasignar-competidor/reasignar-competidor.component';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-gestion-torneo',
@@ -33,89 +29,103 @@ import { ReasignarCompetidorComponent } from '@app/shared/components/modales/rea
   templateUrl: './gestion-torneo.component.html',
   styleUrl: './gestion-torneo.component.scss',
 })
-export class GestionTorneoComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class GestionTorneoComponent implements OnInit, AfterViewInit {
   NOMBRE_SIN_ASIGNACION = 'Sin asignar';
 
   @Input() torneoId: number | string = 'bracket-default';
   @Input() torneoData: IGestionTorneoData | null = null;
-  private viewerSubscription: Subscription | null = null;
 
-  itemBracketsSelect: IItemBracketsSelect | null = null;
-
-  participantsMap: Map<any, any> = new Map<number, any>();
+  // --- Signals ---
+  participantsMap = signal<Map<number, any>>(new Map());
+  itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
 
   constructor(
     private viewerService: ViewerService,
-    private dialog: MatDialog,
-    private _dialogService: DialogService
+    private _dialogService: DialogService,
+    private destroyRef: DestroyRef
   ) { }
 
   ngOnInit(): void {
-    console.log(
-      `GestionTorneoComponent para ID ${this.torneoId} inicializado.`
-    );
+    console.log(`✅ [${this.torneoId}] Componente inicializado`);
   }
 
   async ngAfterViewInit(): Promise<void> {
-    if (this.torneoData) {
-      console.log(`[${this.torneoId}] Inicializando visor...`);
+    if (!this.torneoData) return;
 
-      this.participantsMap = new Map(
-        this.torneoData?.miTorneo?.participants.map((p: any) => [p.bracket.id, p])
-      );
+    console.log(`⚙️ [${this.torneoId}] Inicializando visor...`);
 
-      // Espera a que el servicio devuelva el Observable
-      const matchActionObservable = await this.viewerService.initializeViewer(
-        this.torneoId,
-        this.torneoData.viewerData
-      );
+    // Guardamos los participantes en el mapa para buscarlos rápido por id
+    this.participantsMap.set(
+      new Map(
+        this.torneoData.miTorneo?.participants.map((p: any) => [
+          p.bracket.id,
+          p,
+        ])
+      )
+    );
 
-      // Suscribe la instancia actual del componente al Observable que le corresponde
-      this.viewerSubscription = matchActionObservable.subscribe({
-        next: async (message: IResponseSelectMatch) => {
-          console.log(
-            `[${this.torneoId}] Mensaje de acción recibido:`,
-            message
-          );
+    // Inicializamos el visor y escuchamos eventos de selección de matches
+    const matchActionObservable = await this.viewerService.initializeViewer(
+      this.torneoId,
+      this.torneoData.viewerData
+    );
 
-          this.itemBracketsSelect = this.mapItemSelect(message);
-
-          this.onOpcionesSeleccion();
-
-          const matchSeleccionado =
-            this.torneoData?.viewerData?.matches[Number(message.match.id)];
-
-          //await this.refrescarRender();
-        },
-        error: (err) => {
-          console.error(
-            `[${this.torneoId}] Error al recibir el mensaje del servicio:`,
-            err
-          );
-        },
-      });
-    }
+    matchActionObservable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (message: IResponseSelectMatch) => {
+        // 🔔 Log único para cuando llega un mensaje
+        console.log(`[${this.torneoId}] 📩 Acción recibida:`, message);
+        this.handleMatchAction(message);
+      },
+      error: (err) => {
+        console.error(`[${this.torneoId}] ❌ Error al recibir mensaje:`, err);
+      },
+    });
   }
 
+  /**
+   * Maneja las acciones de match recibidas
+   */
+  private handleMatchAction(message: IResponseSelectMatch): void {
+    // Mapeamos el mensaje a un item seleccionable
+    const mappedItem = this.mapItemSelect(message);
+
+    // Actualizamos la señal con el item actual
+    this.itemBracketsSelect.set(mappedItem);
+
+    // Abrimos el modal con las opciones disponibles
+    this.openModalOpcionesSeleccion();
+  }
+
+  /**
+   * Refresca el render del visor
+   */
   async refrescarRender() {
+    console.log(`🔄 [${this.torneoId}] Refrescando render del visor...`);
     await this.viewerService.viewerRender(
       this.torneoId,
       this.torneoData?.viewerData
     );
   }
 
-  mapItemSelect(message: IResponseSelectMatch): IItemBracketsSelect {
+  /**
+   * Mapea el mensaje de respuesta a un item seleccionable
+   */
+  private mapItemSelect(message: IResponseSelectMatch): IItemBracketsSelect {
     return {
       match: message.match,
       customOpponents: [
         this.buildOpponent(message?.match?.opponent1),
-        this.buildOpponent(message.match?.opponent2)
-      ]
+        this.buildOpponent(message.match?.opponent2),
+      ],
     };
   }
 
-  private buildOpponent(opponent: ParticipantResult | null): IOpponentBracketSelect {
+  /**
+   * Construye un oponente para la selección
+   */
+  private buildOpponent(
+    opponent: ParticipantResult | null
+  ): IOpponentBracketSelect {
     const participant = this.getOpponent(opponent?.id);
     return {
       match: {
@@ -123,61 +133,76 @@ export class GestionTorneoComponent
         name: this.getOpponentName(participant),
         result: opponent?.result ?? null,
       },
-      participant
+      participant,
     };
   }
 
-  private getOpponent(opponentId: any): string | null {
-    return opponentId != null ? this.participantsMap.get(opponentId) ?? null : null;
+  /**
+   * Busca un participante por id en el mapa
+   */
+  private getOpponent(opponentId: any): any | null {
+    return opponentId != null
+      ? this.participantsMap().get(opponentId) ?? null
+      : null;
   }
 
+  /**
+   * Obtiene el nombre de un oponente
+   */
   private getOpponentName(opponent: any): string {
     return opponent?.bracket?.name ?? this.NOMBRE_SIN_ASIGNACION;
   }
 
-  ngOnDestroy(): void {
-    if (this.viewerSubscription) {
-      this.viewerSubscription.unsubscribe();
-    }
-  }
+  /**
+   * Abre el modal de opciones de selección
+   */
+  private openModalOpcionesSeleccion(): void {
+    const currentItem = this.itemBracketsSelect();
+    if (!currentItem) return;
 
-  console(data: any) {
-    console.log(`Data ->`, JSON.stringify(data, null, 2));
-  }
+    const dialogData = {
+      itemBracketsSelect: currentItem,
+      torneoData: this.torneoData,
+    };
 
-  onOpcionesSeleccion() {
+    const dialogRef = this._dialogService.open(
+      OpcionesSeleccionComponent,
+      dialogData
+    );
 
-    const data = {
-      itemBracketsSelect: this.itemBracketsSelect,
-      torneoData: this.torneoData
-    }
-
-    const dialogRef = this._dialogService.open(OpcionesSeleccionComponent, data);
-
-    dialogRef.afterClosed().subscribe((result: IOpcionSeleccionar) => {
-      if (result) {
-        if (AccionCompetidorEnum.CAMBIAR == result.accion) {
+    dialogRef
+      .afterClosed()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((result: IOpcionSeleccionar) => !!result)
+      )
+      .subscribe((result: IOpcionSeleccionar) => {
+        if (result.accion === AccionCompetidorEnum.CAMBIAR) {
           this.openModalCambiar(result);
         }
-      }
-    });
-
+      });
   }
 
+  /**
+   * Abre el modal para reasignar un competidor
+   */
   openModalCambiar(result: IOpcionSeleccionar) {
-
     const data = {
       idOpponent: result.idOpponent,
-      itemBracketsSelect: this.itemBracketsSelect,
-      torneoData: this.torneoData
-    }
+      itemBracketsSelect: this.itemBracketsSelect(),
+      torneoData: this.torneoData,
+    };
 
-    const dialogRef = this._dialogService.open(ReasignarCompetidorComponent, data);
+    const dialogRef = this._dialogService.open(
+      ReasignarCompetidorComponent,
+      data
+    );
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'ABRIR') {
-        this.onOpcionesSeleccion(); // <- reabrir la primera modal
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        console.log(`[${this.torneoId}] 🔄 Reasignación result:`, result);
+      });
   }
 }
