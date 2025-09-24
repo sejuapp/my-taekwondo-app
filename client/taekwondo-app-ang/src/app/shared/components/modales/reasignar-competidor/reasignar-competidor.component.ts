@@ -55,6 +55,6 @@ export class ReasignarCompetidorComponent {
   }
 
   cerrar(): void {
-    this.dialogRef.close('ABRIR');
+    this.dialogRef.close();
   }
 }

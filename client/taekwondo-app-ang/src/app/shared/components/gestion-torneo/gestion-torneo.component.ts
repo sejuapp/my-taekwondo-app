@@ -210,6 +210,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((nuevoOponente: IParticipantCategoria | null) => {
+
         if (!nuevoOponente) {
           console.log(`[${this.torneoId}] ❌ Reasignación cancelada`);
           return;

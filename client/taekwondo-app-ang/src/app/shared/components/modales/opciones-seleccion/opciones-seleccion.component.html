@@ -18,16 +18,73 @@
               {{ item?.match?.name }} - {{ item?.match?.result }}
             </mat-panel-description>
           </mat-expansion-panel-header>
-
           <section>
+            <div class="persona-info-container">
+              <mat-card class="persona-card">
+                <mat-card-header>
+                  <mat-card-subtitle>
+                    <mat-icon class="header-icon">person</mat-icon>
+                    {{ item?.participant?.persona?.nombreCompleto }}
+                  </mat-card-subtitle>
+                </mat-card-header>
 
-            <div>
-              @if(item?.participant){
-              <button mat-flat-button color="primary" (click)="onCambiarCompetidor(item)">
-                Cambiar competidor
-              </button>
-              }
+                <mat-card-content>
+                  <div class="info-grid">
+
+                    <!-- Cinturón -->
+                    <div class="info-item">
+                      <mat-icon class="info-icon">sports_martial_arts</mat-icon>
+                      <div class="info-content">
+                        <span class="info-label">Cinturón</span>
+                        <span class="info-value cinturon-badge"
+                          [ngClass]="'cinturon-' + item?.participant?.persona?.cinturon?.toLowerCase()">
+                          {{ item?.participant?.persona?.cinturon }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Peso -->
+                    <div class="info-item">
+                      <mat-icon class="info-icon">monitor_weight</mat-icon>
+                      <div class="info-content">
+                        <span class="info-label">Peso</span>
+                        <span class="info-value">{{ item?.participant?.persona?.peso }} kg</span>
+                      </div>
+                    </div>
+
+                    <!-- Altura -->
+                    <div class="info-item">
+                      <mat-icon class="info-icon">height</mat-icon>
+                      <div class="info-content">
+                        <span class="info-label">Altura</span>
+                        <span class="info-value">{{ item?.participant?.persona?.altura }} cm</span>
+                      </div>
+                    </div>
+
+                    <!-- Fecha de nacimiento -->
+                    <div class="info-item">
+                      <mat-icon class="info-icon">cake</mat-icon>
+                      <div class="info-content">
+                        <span class="info-label">Fecha de Nacimiento</span>
+                        <span class="info-value">{{ item?.participant?.persona?.fechaNacimiento | date:'dd/MM/yyyy'
+                          }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
             </div>
+
+            <section>
+
+              <div>
+                @if(item?.participant){
+                <button mat-flat-button color="primary" (click)="onCambiarCompetidor(item)">
+                  Cambiar competidor
+                </button>
+                }
+              </div>
+            </section>
           </section>
         </mat-expansion-panel>
         }

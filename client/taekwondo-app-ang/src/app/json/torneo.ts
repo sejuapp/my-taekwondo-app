@@ -1,4 +1,4 @@
-import { IInfoTorneoCategoria } from "@app/interface/request/info-torneo-categoria";
+import { IInfoTorneoCategoria } from '@app/interface/request/info-torneo-categoria';
 
 export const dataTorneo: IInfoTorneoCategoria = {
   stage: {
@@ -8,89 +8,74 @@ export const dataTorneo: IInfoTorneoCategoria = {
   },
   participants: [
     {
-      "persona": {
-        "id": 1,
-        "nombre1": "Sebastian",
-        "nombre2": "Alejandro",
-        "apellido1": "Gonzalez",
-        "apellido2": "Montenegro",
-        "fechaNacimiento": "2013-10-25",
-        "peso": 22,
-        "cinturon" : "Amarillo",
-        "altura" : 110
+      persona: {
+        id: 1,
+        nombreCompleto: 'Sebastian Alejandro Gonzalez Montenegro',
+        fechaNacimiento: '2013-10-25',
+        peso: 22,
+        cinturon: 'Amarillo',
+        altura: 110,
       },
-      "bracket": {
-        "id": 1,
-        "name": "Sebastian Gonzalez"
-      }
+      bracket: {
+        id: 1,
+        name: 'Sebastian Gonzalez',
+      },
     },
     {
-      "persona": {
-        "id": 2,
-        "nombre1": "Julian",
-        "nombre2": "David",
-        "apellido1": "Gonzalez",
-        "apellido2": "Montenegro",
-        "fechaNacimiento": "2018-10-25",
-        "peso": 18,
-        "cinturon" : "Amarillo",
-        "altura" : 110
+      persona: {
+        id: 2,
+        nombreCompleto: 'Julian David Gonzalez Montenegro',
+        fechaNacimiento: '2018-10-25',
+        peso: 18,
+        cinturon: 'Amarillo',
+        altura: 110,
       },
-      "bracket": {
-        "id": 2,
-        "name": "Julian Gonzalez"
-      }
+      bracket: {
+        id: 2,
+        name: 'Julian Gonzalez',
+      },
     },
     {
-      "persona": {
-        "id": 3,
-        "nombre1": "Ivan",
-        "nombre2": "David",
-        "apellido1": "Gonzalez",
-        "apellido2": "Agulo",
-        "fechaNacimiento": "1988-10-25",
-        "peso": 100,
-        "cinturon" : "Amarillo",
-        "altura" : 110
+      persona: {
+        id: 3,
+        nombreCompleto: 'Ivan David Gonzalez Agulo',
+        fechaNacimiento: '1988-10-25',
+        peso: 100,
+        cinturon: 'Amarillo',
+        altura: 110,
       },
-      "bracket": {
-        "id": 3,
-        "name": "Ivan Gonzalez"
-      }
+      bracket: {
+        id: 3,
+        name: 'Ivan Gonzalez',
+      },
     },
     {
-      "persona": {
-        "id": 4,
-        "nombre1": "Juan",
-        "nombre2": "Carlos",
-        "apellido1": "Rojas",
-        "apellido2": "Estupiñan",
-        "fechaNacimiento": "2013-09-10",
-        "peso": 22,
-        "cinturon" : "Amarillo",
-        "altura" : 110
+      persona: {
+        id: 4,
+        nombreCompleto: 'Juan Carlos Rojas Estupiñan',
+        fechaNacimiento: '2013-09-10',
+        peso: 22,
+        cinturon: 'Amarillo',
+        altura: 110,
       },
-      "bracket": {
-        "id": 4,
-        "name": "Juan Rojas"
-      }
+      bracket: {
+        id: 4,
+        name: 'Juan Rojas',
+      },
     },
     {
-      "persona": {
-        "id": 5,
-        "nombre1": "Victor",
-        "nombre2": "Felipe",
-        "apellido1": "Fonseca",
-        "apellido2": "Rojas",
-        "fechaNacimiento": "2013-09-10",
-        "peso": 25,
-        "cinturon" : "Amarillo",
-        "altura" : 110
+      persona: {
+        id: 5,
+        nombreCompleto: 'Victor Felipe Fonseca Rojas',
+        fechaNacimiento: '2013-09-10',
+        peso: 25,
+        cinturon: 'Amarillo',
+        altura: 110,
       },
-      "bracket": {
-        "id": 5,
-        "name": "Victor Fonseca"
-      }
-    }
-  ]
-}
+      bracket: {
+        id: 5,
+        name: 'Victor Fonseca',
+      },
+    },
+  ],
+};

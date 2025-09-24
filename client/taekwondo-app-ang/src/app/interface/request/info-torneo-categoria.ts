@@ -18,10 +18,7 @@ export interface IParticipantCategoria {
 
 export interface IPersonaCategoria {
   id: number
-  nombre1: string;
-  nombre2: string;
-  apellido1: string;
-  apellido2: string;
+  nombreCompleto: string;
   fechaNacimiento: string; // se puede cambiar a Date si lo vas a parsear
   peso: number;
   cinturon: string;
