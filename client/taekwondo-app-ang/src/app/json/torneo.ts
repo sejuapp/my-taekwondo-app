@@ -15,6 +15,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 22,
         cinturon: 'Verde',
         altura: 110,
+        club : 'OBELIUS'
       },
       bracket: {
         id: 1,
@@ -29,6 +30,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 18,
         cinturon: 'Amarillo',
         altura: 110,
+        club : 'OBELIUS'
       },
       bracket: {
         id: 2,
@@ -43,6 +45,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 100,
         cinturon: 'Azul',
         altura: 110,
+        club : 'OBELIUS'
       },
       bracket: {
         id: 3,
@@ -57,6 +60,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 22,
         cinturon: 'Amarillo',
         altura: 110,
+        club : 'OBELIUS'
       },
       bracket: {
         id: 4,
@@ -71,6 +75,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 25,
         cinturon: 'Amarillo',
         altura: 110,
+        club : 'OBELIUS'
       },
       bracket: {
         id: 5,

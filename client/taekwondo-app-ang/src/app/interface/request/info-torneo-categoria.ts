@@ -23,6 +23,7 @@ export interface IPersonaCategoria {
   peso: number;
   cinturon: string;
   altura: number;
+  club: string | null;
 }
 
 export interface IBracketCategoria {

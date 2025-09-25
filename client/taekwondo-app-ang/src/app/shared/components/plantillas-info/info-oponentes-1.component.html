@@ -1,0 +1,54 @@
+<div class="panel-content">
+  <!-- Información compacta en una sola fila -->
+  <div class="info-row">
+    <!-- Cinturón -->
+    <div class="info-item-compact">
+      <mat-icon class="info-icon-small">sports_martial_arts</mat-icon>
+      <div class="info-content-compact">
+        <span class="info-label-small">Cinturón</span>
+        <span class="info-value-compact cinturon-badge"
+          [ngClass]="'cinturon-' + persona?.cinturon?.toLowerCase()">
+          {{ persona?.cinturon }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Peso -->
+    <div class="info-item-compact">
+      <mat-icon class="info-icon-small">monitor_weight</mat-icon>
+      <div class="info-content-compact">
+        <span class="info-label-small">Peso</span>
+        <span class="info-value-compact">{{ persona?.peso }} kg</span>
+      </div>
+    </div>
+
+    <!-- Altura -->
+    <div class="info-item-compact">
+      <mat-icon class="info-icon-small">height</mat-icon>
+      <div class="info-content-compact">
+        <span class="info-label-small">Altura</span>
+        <span class="info-value-compact">{{ persona?.altura }} cm</span>
+      </div>
+    </div>
+
+    <!-- Fecha de nacimiento -->
+    <div class="info-item-compact">
+      <mat-icon class="info-icon-small">cake</mat-icon>
+      <div class="info-content-compact">
+        <span class="info-label-small">Fecha Nac.</span>
+        <span class="info-value-compact">{{ persona?.fechaNacimiento | date:'dd/MM/yyyy'
+          }}</span>
+      </div>
+    </div>
+
+    <!-- Edad -->
+    <div class="info-item-compact">
+      <mat-icon class="info-icon-small">calendar_month</mat-icon>
+      <div class="info-content-compact">
+        <span class="info-label-small">Edad</span>
+        <span class="info-value-compact">{{getEdad( persona?.fechaNacimiento ?? null)}}</span>
+      </div>
+    </div>
+
+  </div>
+</div>

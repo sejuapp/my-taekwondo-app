@@ -13,11 +13,12 @@ import {
 } from '@app/interface/item-brackets-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
+import { InfoOponentes1Component } from '@app/shared/components/plantillas-info/info-oponentes-1.component';
 import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 
 @Component({
   selector: 'app-opciones-seleccion',
-  imports: [...AllSharedImports],
+  imports: [...AllSharedImports, InfoOponentes1Component],
   templateUrl: './opciones-seleccion.component.html',
   styleUrl: './opciones-seleccion.component.scss',
 })
@@ -50,19 +51,6 @@ export class OpcionesSeleccionComponent {
 
   cerrar(): void {
     this.dialogRef.close();
-  }
-
-  // Para calcular la edad
-  getEdad(fechaNacimiento: string | null): number {
-    if (!fechaNacimiento) return 0;
-    const hoy = new Date();
-    const nacimiento = new Date(fechaNacimiento);
-    let edad = hoy.getFullYear() - nacimiento.getFullYear();
-    const mes = hoy.getMonth() - nacimiento.getMonth();
-    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
-      edad--;
-    }
-    return edad;
   }
 
   // Para clases de resultado
