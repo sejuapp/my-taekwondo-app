@@ -13,7 +13,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         nombreCompleto: 'Sebastian Alejandro Gonzalez Montenegro',
         fechaNacimiento: '2013-10-25',
         peso: 22,
-        cinturon: 'Amarillo',
+        cinturon: 'Verde',
         altura: 110,
       },
       bracket: {
@@ -41,7 +41,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         nombreCompleto: 'Ivan David Gonzalez Agulo',
         fechaNacimiento: '1988-10-25',
         peso: 100,
-        cinturon: 'Amarillo',
+        cinturon: 'Azul',
         altura: 110,
       },
       bracket: {
