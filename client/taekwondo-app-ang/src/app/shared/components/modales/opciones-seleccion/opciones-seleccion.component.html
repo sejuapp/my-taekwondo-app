@@ -7,7 +7,7 @@
   </mat-card-header>
 
   <mat-card-content>
-    <mat-dialog-content class="optimized-dialog-content">
+    <mat-dialog-content>
       <mat-accordion multi>
         @for (item of itemBracketsSelect()?.customOpponents; track $index; let i = $index) {
         <mat-expansion-panel expanded="true">
@@ -58,9 +58,18 @@
               <div class="info-item-compact">
                 <mat-icon class="info-icon-small">cake</mat-icon>
                 <div class="info-content-compact">
-                  <span class="info-label-small">Fecha de Nacimiento</span>
+                  <span class="info-label-small">Fecha Nac.</span>
                   <span class="info-value-compact">{{ item?.participant?.persona?.fechaNacimiento | date:'dd/MM/yyyy'
                     }}</span>
+                </div>
+              </div>
+
+              <!-- Edad -->
+              <div class="info-item-compact">
+                <mat-icon class="info-icon-small">calendar_month</mat-icon>
+                <div class="info-content-compact">
+                  <span class="info-label-small">Edad</span>
+                  <span class="info-value-compact">{{getEdad( item?.participant?.persona?.fechaNacimiento ?? null)}}</span>
                 </div>
               </div>
 

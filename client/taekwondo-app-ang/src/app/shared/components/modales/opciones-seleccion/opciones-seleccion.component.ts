@@ -51,4 +51,27 @@ export class OpcionesSeleccionComponent {
   cerrar(): void {
     this.dialogRef.close();
   }
+
+  // Para calcular la edad
+  getEdad(fechaNacimiento: string | null): number {
+    if (!fechaNacimiento) return 0;
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
+  }
+
+  // Para clases de resultado
+  getResultClass(result: string | null): string {
+    switch (result?.toLowerCase()) {
+      case 'victoria': case 'win': return 'result-win';
+      case 'derrota': case 'loss': return 'result-loss';
+      case 'empate': case 'draw': return 'result-draw';
+      default: return 'result-pending';
+    }
+  }
 }
