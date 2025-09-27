@@ -1,41 +1,25 @@
 <mat-card-custom>
   <mat-card-header>
-    <mat-card-title>Opciones del match</mat-card-title>
+    <mat-card-title>Opciones del encuentro</mat-card-title>
     <mat-card-subtitle>
-      Se muestran las diferentes opciones que existen para el match seleccionado
+      De click sobre el icono<mat-icon> more_vert </mat-icon>
+      ubicado en la parte superior derecha de cada oponente para ver las
+      opciones disponibles.
     </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
     <mat-dialog-content>
-      <mat-accordion multi>
-        @for (item of itemBracketsSelect()?.customOpponents; track $index; let i = $index) {
-        <mat-expansion-panel expanded="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon class="opponent-icon">person</mat-icon>
-              Oponente {{ i + 1 }}
-            </mat-panel-title>
-            <mat-panel-description>
-              {{ item?.match?.name }} - {{ item?.match?.result }}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
+      <app-info-encabezado-match
+        [itemBracketsSelect]="itemBracketsSelect"
+        (cambiarCompetidor)="onCambiarCompetidor($event)"
+      ></app-info-encabezado-match>
 
-          <app-info-oponentes-1 [persona]="item?.participant?.persona ?? null"></app-info-oponentes-1>
-
-
-          <!-- Botón de acción -->
-          <div>
-            @if(item?.participant){
-            <button mat-flat-button color="primary" class="compact-button" (click)="onCambiarCompetidor(item)">
-              <mat-icon>swap_horiz</mat-icon>
-              Cambiar
-            </button>
-            }
-          </div>
-        </mat-expansion-panel>
-        }
-      </mat-accordion>
+      <div class="row">
+        <app-info-oponentes-2
+          [customOpponents]="itemBracketsSelect()?.customOpponents ?? []"
+        ></app-info-oponentes-2>
+      </div>
     </mat-dialog-content>
   </mat-card-content>
 

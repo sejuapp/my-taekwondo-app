@@ -6,13 +6,9 @@
 
   <mat-card-content>
 
-    <mat-icon>sports_martial_arts</mat-icon>
-    <mat-icon>monitor_weight</mat-icon>
-    <mat-icon>height</mat-icon>
-
     <mat-dialog-content>
-      <strong>{{ competidorAntiguo()?.bracket?.name }}</strong>
-      <br /><br />
+
+      <p>Elija al participante por el cual sera sustituido <strong>{{ competidorAntiguo()?.bracket?.name }}</strong></p>
 
       <mat-list>
         @for (item of competidoresRonda(); track item.bracket.id) {

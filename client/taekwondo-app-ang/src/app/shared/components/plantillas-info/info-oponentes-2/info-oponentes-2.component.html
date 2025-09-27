@@ -1,0 +1,56 @@
+<section class="tbl-container mat-elevation-z8" tabindex="0">
+  <table mat-table [dataSource]="dataSource">
+    <!-- Position Column -->
+    <ng-container matColumnDef="op1T">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="opponent-th opponent-th-number">
+          Oponente 1
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="info-item-compact">
+          <mat-icon class="info-icon-small"> {{ element.icon }}</mat-icon>
+          <div class="info-content-compact">
+            <span class="info-label-small">{{ element.label }}</span>
+
+            @if (element.label.toLowerCase() === 'cinturon'.toLowerCase()) {
+            <span class="info-value-compact cinturon-badge" [ngClass]="'cinturon-' + element.op1?.toLowerCase()">
+              {{ element.op1 ?? "N/A" }}
+            </span>
+            } @else {
+            <span class="info-value-compact">{{ element.op1 }} {{validarComplemento(element?.label ?? '')}} </span>
+            }
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="op2T">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="opponent-th red-accent opponent-th-number">
+          Oponente 2
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="info-item-compact">
+          <mat-icon class="info-icon-small"> {{ element.icon }}</mat-icon>
+          <div class="info-content-compact">
+            <span class="info-label-small">{{ element.label }}</span>
+
+            @if (element.label.toLowerCase() === 'cinturon'.toLowerCase()) {
+            <span class="info-value-compact cinturon-badge" [ngClass]="'cinturon-' + element.op2?.toLowerCase()">
+              {{ element.op2 ?? "N/A" }}
+            </span>
+            } @else {
+            <span class="info-value-compact">{{ element.op2 }} {{validarComplemento(element?.label ?? '')}}</span>
+            }
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</section>

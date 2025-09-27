@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  computed,
-  Inject,
-  signal,
-} from '@angular/core';
+import { Component, computed, Inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   IItemBracketsSelect,
@@ -13,12 +7,17 @@ import {
 } from '@app/interface/item-brackets-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
-import { InfoOponentes1Component } from '@app/shared/components/plantillas-info/info-oponentes-1.component';
+import { InfoEncabezadoMatchComponent } from '@app/shared/components/plantillas-info/info-encabezado-match/info-encabezado-match.component';
+import { InfoOponentes2Component } from '@app/shared/components/plantillas-info/info-oponentes-2/info-oponentes-2.component';
 import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 
 @Component({
   selector: 'app-opciones-seleccion',
-  imports: [...AllSharedImports, InfoOponentes1Component],
+  imports: [
+    ...AllSharedImports,
+    InfoOponentes2Component,
+    InfoEncabezadoMatchComponent,
+  ],
   templateUrl: './opciones-seleccion.component.html',
   styleUrl: './opciones-seleccion.component.scss',
 })
@@ -41,7 +40,9 @@ export class OpcionesSeleccionComponent {
     this.torneoData.set(data.torneoData);
   }
 
-  onCambiarCompetidor(oponente: IOpponentBracketSelect) {
+  onCambiarCompetidor(oponente: IOpponentBracketSelect | null): void {
+    if (!oponente) return;
+
     const data: IOpcionSeleccionar = {
       accion: AccionCompetidorEnum.CAMBIAR,
       idOpponent: oponente.match.id,
@@ -56,10 +57,17 @@ export class OpcionesSeleccionComponent {
   // Para clases de resultado
   getResultClass(result: string | null): string {
     switch (result?.toLowerCase()) {
-      case 'victoria': case 'win': return 'result-win';
-      case 'derrota': case 'loss': return 'result-loss';
-      case 'empate': case 'draw': return 'result-draw';
-      default: return 'result-pending';
+      case 'victoria':
+      case 'win':
+        return 'result-win';
+      case 'derrota':
+      case 'loss':
+        return 'result-loss';
+      case 'empate':
+      case 'draw':
+        return 'result-draw';
+      default:
+        return 'result-pending';
     }
   }
 }

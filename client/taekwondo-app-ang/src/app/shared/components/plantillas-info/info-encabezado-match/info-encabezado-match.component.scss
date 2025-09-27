@@ -1,0 +1,121 @@
+.pointer {
+  cursor: pointer;
+}
+
+.opponent-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: none;
+  height: 100%;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  // Línea decorativa sutil
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(0, 47, 255, 0.815), transparent);
+  }
+
+  &.red-accent::before {
+    background: linear-gradient(90deg, transparent, rgba(238, 0, 32, 0.575), transparent);
+  }
+}
+
+.opponent-card-content {
+  padding: 14px 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.opponent-header {
+  display: flex;
+  align-items: center;
+}
+
+.opponent-info {
+  flex: 1;
+}
+
+.opponent-number {
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px; // Espacio entre el icono y el texto
+}
+
+.opponent-small-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0; // Evita que se comprima
+
+  // Degradado azul para oponente 1
+  &.blue {
+    background: linear-gradient(135deg, #002efd 0%, #a6acff 100%);
+  }
+
+  // Degradado rojo para oponente 2
+  &.red {
+    background: linear-gradient(135deg, #ff0000 0%, #ff667a 100%);
+  }
+}
+
+.opponent-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #444444ad;
+  line-height: 1.3;
+  margin: 0;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .opponent-card-content {
+    padding: 12px 14px;
+  }
+
+  .opponent-small-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+  }
+
+  .opponent-name {
+    font-size: 14px;
+  }
+}
+
+
+.winner-color-txt {
+  color: #04b000;
+}
+
+.winner-color-number {
+  background: radial-gradient(circle, #d4edda 0%, #ffffff 100%);
+}
+
+
+.menu-content {
+  padding: 5px;
+}

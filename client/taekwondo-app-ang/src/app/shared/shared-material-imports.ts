@@ -14,6 +14,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 export const SharedMaterialImports = [
   MatButtonModule,
@@ -31,5 +32,6 @@ export const SharedMaterialImports = [
   MatMenuModule,
   MatExpansionModule,
   MatListModule,
-  MatChipsModule
+  MatChipsModule,
+  MatButtonToggleModule
 ];
