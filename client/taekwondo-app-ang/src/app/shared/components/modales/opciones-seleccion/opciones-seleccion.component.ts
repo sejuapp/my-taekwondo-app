@@ -40,15 +40,31 @@ export class OpcionesSeleccionComponent {
     this.torneoData.set(data.torneoData);
   }
 
-  onCambiarCompetidor(oponente: IOpponentBracketSelect | null): void {
-    if (!oponente) return;
+  onCambiarCompetidor(opponentBracketSelect: IOpponentBracketSelect | null): void {
+    if (!opponentBracketSelect) return;
 
     const data: IOpcionSeleccionar = {
       accion: AccionCompetidorEnum.CAMBIAR,
-      idOpponent: oponente.match.id,
+      dataSeleccion: {
+        idOpponentAnterior: opponentBracketSelect.opponent.id,
+      }
     };
     this.dialogRef.close(data);
   }
+
+  onDeclararGanador(opponentBracketSelect: IOpponentBracketSelect | null): void {
+    if (!opponentBracketSelect) return;
+
+    const data: IOpcionSeleccionar = {
+      accion: AccionCompetidorEnum.ASIGNAR_GANADOR,
+      dataSeleccion : {
+        idOpponentWinner : opponentBracketSelect.opponent.id
+      }
+    };
+    this.dialogRef.close(data);
+  }
+
+
 
   cerrar(): void {
     this.dialogRef.close();

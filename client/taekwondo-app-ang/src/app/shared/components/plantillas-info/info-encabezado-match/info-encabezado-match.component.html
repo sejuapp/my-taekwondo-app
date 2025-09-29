@@ -42,7 +42,7 @@
     }
 
     @if (!existeGanador()) {
-    <button mat-menu-item>Declarar ganador</button>
+    <button mat-menu-item (click)="onDeclararGanador()">Declarar ganador</button>
     }
 
 

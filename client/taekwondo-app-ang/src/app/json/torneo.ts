@@ -2,7 +2,6 @@ import { IInfoTorneoCategoria } from '@app/interface/request/info-torneo-categor
 
 export const dataTorneo: IInfoTorneoCategoria = {
   stage: {
-    tournamentId: 'T1',
     name: ' ',
     type: 'single_elimination',
   },

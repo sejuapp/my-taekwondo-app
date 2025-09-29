@@ -18,7 +18,7 @@ export class CombatesComponent implements OnInit {
 
   tournamentsData = signal<IGestionTorneoData[]>([]);
 
-  constructor(private tournamentService: TournamentService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.cargarTorneos();
@@ -30,20 +30,11 @@ export class CombatesComponent implements OnInit {
 
   async agregarTorneo(miTorneoCategoria: IInfoTorneoCategoria) {
     const nuevoTorneo = await this.crearTorneo(miTorneoCategoria);
-    console.log('Torneo generado ::> ', nuevoTorneo);
-
     this.tournamentsData.update(prev => [...prev, nuevoTorneo]);
   }
 
   private async crearTorneo(miTorneoCategoria: IInfoTorneoCategoria): Promise<IGestionTorneoData> {
-    const dataCreate: ITorneoCreateData = {
-      participants: miTorneoCategoria.participants.map((m: any) => m.bracket),
-      stage: <InputStage>miTorneoCategoria.stage
-    };
-
-    const dataTorneo = await this.tournamentService.createTournament(dataCreate, []);
     return {
-      viewerData: dataTorneo?.viewerData ?? null,
       miTorneoCategoria : miTorneoCategoria
     };
   }

@@ -6,8 +6,7 @@ export interface IInfoTorneoCategoria {
 }
 
 export interface IStageCategoria {
-  tournamentId: string;
-  name: string; // Si no tiene información debe ser cadena con espacio en blanco ' '.
+  name: string;
   type: StageType; // si siempre será "single_elimination" puedes tiparlo como literal: "single_elimination"
 }
 

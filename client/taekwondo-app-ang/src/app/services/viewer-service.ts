@@ -33,9 +33,7 @@ export class ViewerService {
   async viewerRender(selectorId: string | number, tournamentData: any) {
     const viewer = window.bracketsViewer;
     const selectorStr = String(selectorId);
-    const miSelector = selectorStr.startsWith('#')
-      ? selectorStr
-      : `#${selectorStr}`;
+    const miSelector = selectorStr.startsWith('#') ? selectorStr : `#${selectorStr}`;
     await viewer.render(tournamentData, { selector: miSelector, clear: true });
   }
 

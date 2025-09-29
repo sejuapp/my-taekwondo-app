@@ -27,6 +27,5 @@ export interface IViewerData {
 }
 
 export interface IGestionTorneoData {
-  viewerData: IViewerData | null,
   miTorneoCategoria: IInfoTorneoCategoria
 }

@@ -24,6 +24,9 @@ import { ReasignarCompetidorComponent } from '@app/shared/components/modales/rea
 import { filter } from 'rxjs';
 import { IParticipantCategoria } from '@app/interface/request/info-torneo-categoria';
 import { IdOpponent } from '@app/type/type-brackets';
+import { generateId } from '@app/utils/id-generator';
+import { TournamentService } from '@app/services/tournament-service';
+import { BracketsManager } from 'brackets-manager';
 
 @Component({
   selector: 'app-gestion-torneo',
@@ -32,29 +35,31 @@ import { IdOpponent } from '@app/type/type-brackets';
   styleUrl: './gestion-torneo.component.scss',
 })
 export class GestionTorneoComponent implements OnInit, AfterViewInit {
-  NOMBRE_SIN_ASIGNACION = 'Sin asignar';
-
-  @Input() torneoId: number | string = 'bracket-default';
   @Input() torneoData: IGestionTorneoData | null = null;
+
+  viewerId: string = `V_${generateId()}`;
+  bracketsManager: BracketsManager | null = null;
+  viewerData: any = null;
+
+  NOMBRE_SIN_ASIGNACION = 'Sin asignar';
 
   // --- Signals ---
   participantsMap = signal<Map<number, any>>(new Map());
   itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
 
   constructor(
+    private _tournamentService: TournamentService,
     private viewerService: ViewerService,
     private _dialogService: DialogService,
     private destroyRef: DestroyRef
   ) { }
 
   ngOnInit(): void {
-    console.log(`✅ [${this.torneoId}] Componente inicializado`);
+    console.log(`✅ [${this.viewerId}] Componente inicializado`);
   }
 
   async ngAfterViewInit(): Promise<void> {
     if (!this.torneoData) return;
-
-    console.log(`⚙️ [${this.torneoId}] Inicializando visor...`);
 
     // Guardamos los participantes en el mapa para buscarlos rápido por id
     this.participantsMap.set(
@@ -66,20 +71,25 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       )
     );
 
+    this.bracketsManager = await this._tournamentService.createBracketsManager(this.viewerId, this.torneoData.miTorneoCategoria);
+    this.viewerData = await this._tournamentService.getViewerData(this.bracketsManager);
+
+    console.log(`⚙️ [${this.viewerId}] Inicializando visor... `, this.viewerData);
+
     // Inicializamos el visor y escuchamos eventos de selección de matches
     const matchActionObservable = await this.viewerService.initializeViewer(
-      this.torneoId,
-      this.torneoData.viewerData
+      this.viewerId,
+      this.viewerData.viewerRender
     );
 
     matchActionObservable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (message: IResponseSelectMatch) => {
         // 🔔 Log único para cuando llega un mensaje
-        console.log(`[${this.torneoId}] 📩 Acción recibida:`, message);
+        console.log(`[${this.viewerId}] 📩 Acción recibida:`, message);
         this.handleMatchAction(message);
       },
       error: (err) => {
-        console.error(`[${this.torneoId}] ❌ Error al recibir mensaje:`, err);
+        console.error(`[${this.viewerId}] ❌ Error al recibir mensaje:`, err);
       },
     });
   }
@@ -98,14 +108,19 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     this.openModalOpcionesSeleccion();
   }
 
-  /**
-   * Refresca el render del visor
-   */
-  async refrescarRender() {
-    console.log(`🔄 [${this.torneoId}] Refrescando render del visor...`);
+
+
+  async refreshRender() {
+    if (!this.bracketsManager) {
+      console.error(`[${this.viewerId}] ❌ bracketsManager es null, no se puede refrescar el visor.`);
+      return;
+    }
+
+    this.viewerData = await this._tournamentService.getViewerData(this.bracketsManager);
+
     await this.viewerService.viewerRender(
-      this.torneoId,
-      this.torneoData?.viewerData
+      this.viewerId,
+      this.viewerData?.viewerRender
     );
   }
 
@@ -113,7 +128,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
    * Mapea el mensaje de respuesta a un item seleccionable
    */
   private mapItemSelect(message: IResponseSelectMatch): IItemBracketsSelect {
-    const match = this.torneoData?.viewerData?.matches[message.idMatch];
+    const match = this.viewerData.viewerRender?.matches[message.idMatch];
     if (!match) {
       throw new Error(
         `Match con ID ${message.idMatch} no encontrado en los datos del torneo.`
@@ -136,7 +151,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   ): IOpponentBracketSelect {
     const participant = this.getOpponent(opponent?.id);
     return {
-      match: {
+      opponent: {
         id: opponent?.id,
         name: this.getOpponentName(participant),
         result: opponent?.result ?? null,
@@ -185,10 +200,58 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
         filter((result: IOpcionSeleccionar) => !!result)
       )
       .subscribe((result: IOpcionSeleccionar) => {
+
         if (result.accion === AccionCompetidorEnum.CAMBIAR) {
           this.openModalReasignar(result);
         }
+        if (result.accion === AccionCompetidorEnum.ASIGNAR_GANADOR) {
+          this.asignarGanador(result);
+        }
       });
+  }
+
+  private async asignarGanador(result: IOpcionSeleccionar) {
+    const idMatch = (this.itemBracketsSelect()?.match.id ?? 0).toString();
+    let idOpponentWinner = (result?.dataSeleccion.idOpponentWinner ?? 0).toString();
+
+    const matchId = parseInt(idMatch);
+    const opponentId = parseInt(idOpponentWinner);
+
+    await this.updateWinner(matchId, opponentId);
+
+    /*
+    setTimeout(async () => {
+      console.log('reset');
+      await this.bracketsManager?.reset.matchResults(matchId);
+      await this.refreshRender();
+    }, 5000)
+    */
+  }
+
+  async updateWinner(matchId: number, opponentWinnerId: number) {
+
+    if (this.bracketsManager) {
+
+      const match = this.viewerData?.viewerRender.matches[matchId];
+
+      let llave: any = { id: matchId };
+
+      if (match?.opponent1?.id == opponentWinnerId) {
+        llave['opponent1'] = { result: 'win' };
+      }
+
+      if (match?.opponent2?.id == opponentWinnerId) {
+        llave['opponent2'] = { result: 'win' };
+      }
+
+      await this.bracketsManager?.update.match({
+        id: matchId,
+        opponent1: { result: 'win' }
+      });
+
+      await this.refreshRender();
+    }
+
   }
 
   /**
@@ -196,9 +259,10 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
    */
   openModalReasignar(result: IOpcionSeleccionar) {
     const data = {
-      idOpponent: result.idOpponent,
+      idOpponent: result.dataSeleccion.idOpponentAnterior,
       itemBracketsSelect: this.itemBracketsSelect(),
       torneoData: this.torneoData,
+      viewerData: this.viewerData,
     };
 
     const dialogRef = this._dialogService.open(
@@ -212,31 +276,31 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       .subscribe((nuevoOponente: IParticipantCategoria | null) => {
 
         if (!nuevoOponente) {
-          console.log(`[${this.torneoId}] ❌ Reasignación cancelada`);
+          console.log(`[${this.viewerId}] ❌ Reasignación cancelada`);
           return;
         }
 
-        console.log(`[${this.torneoId}] 🔄 Reasignación result:`, nuevoOponente);
+        console.log(`[${this.viewerId}] 🔄 Reasignación result:`, nuevoOponente);
         this.reasignar(data.idOpponent, nuevoOponente);
       });
   }
 
-  private reasignar(idOponenteAnterior: IdOpponent, nuevoOponente: IParticipantCategoria) {
+  private async reasignar(idOponenteAnterior: IdOpponent, nuevoOponente: IParticipantCategoria) {
 
     const roundId = this.itemBracketsSelect()?.match?.round_id ?? 0;
-    const matches = this.torneoData?.viewerData?.matches ?? [];
+    const matches = this.viewerData.viewerRender?.matches ?? [];
     const nuevoOponenteId = nuevoOponente.bracket.id;
 
     if (matches.length === 0) {
       return;
     }
 
-    const matchesOponenteAnterior = matches.filter(m => {
+    const matchesOponenteAnterior = matches.filter((m: any) => {
       const isRelevantRound = roundId === 0 || m.round_id >= roundId;
       return isRelevantRound && (m.opponent1?.id === idOponenteAnterior || m.opponent2?.id === idOponenteAnterior);
     });
 
-    const matchesNuevoOponente = matches.filter(m => {
+    const matchesNuevoOponente = matches.filter((m: any) => {
       const isRelevantRound = roundId === 0 || m.round_id >= roundId;
       return isRelevantRound && (m.opponent1?.id === nuevoOponenteId || m.opponent2?.id === nuevoOponenteId);
     });
@@ -246,15 +310,18 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     }
 
     // Intercambiar IDs de los oponentes.
-    matchesOponenteAnterior.forEach(item => {
+    matchesOponenteAnterior.forEach((item: any) => {
       this.intercambiarOponente(item, idOponenteAnterior, nuevoOponenteId);
     })
 
-    matchesNuevoOponente.forEach(item => {
+    matchesNuevoOponente.forEach((item: any) => {
       this.intercambiarOponente(item, nuevoOponenteId, idOponenteAnterior);
     })
 
-    this.refrescarRender();
+    if (this.torneoData?.miTorneoCategoria) {
+      this.bracketsManager = await this._tournamentService.createBracketsManager(this.viewerId, this.torneoData.miTorneoCategoria, this.viewerData.viewerRender);
+      this.refreshRender();
+    }
   }
 
   /**

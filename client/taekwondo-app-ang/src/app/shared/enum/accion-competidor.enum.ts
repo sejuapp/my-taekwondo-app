@@ -1,5 +1,5 @@
 export enum AccionCompetidorEnum {
-  ASIGNAR = 'ASIGNAR',
+  ASIGNAR_GANADOR = 'ASIGNAR_GANADOR',
   CAMBIAR = 'CAMBIAR',
   ELIMINAR = 'ELIMINAR'
 }

@@ -9,16 +9,16 @@ export interface IItemBracketsSelect {
 }
 
 export interface IOpponentBracketSelect {
-  match : IMatchBracketSelect;
+  opponent : IOpponentSelect;
   participant : IParticipantCategoria; //Es el item de la lista que viene de la bd
 }
 
 export interface IOpcionSeleccionar  {
   accion : AccionCompetidorEnum;
-  idOpponent : IdOpponent;
+  dataSeleccion : any
 }
 
-export interface IMatchBracketSelect {
+export interface IOpponentSelect {
   id: IdOpponent;
   name: string;
   result: Result | null;

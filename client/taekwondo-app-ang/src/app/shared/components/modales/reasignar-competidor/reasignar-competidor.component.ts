@@ -17,6 +17,8 @@ export class ReasignarCompetidorComponent {
   torneoData: IGestionTorneoData | null;
   idOpponent: IdOpponent;
 
+  viewerData: any = null;
+
   private participantsMap = new Map<IdOpponent, any>();
 
   competidorAntiguo = computed(
@@ -25,7 +27,7 @@ export class ReasignarCompetidorComponent {
 
   competidoresRonda = computed(() => {
     const roundId = this.itemBracketsSelect?.match.round_id;
-    const matches = this.torneoData?.viewerData?.matches ?? [];
+    const matches : any[] = this.viewerData?.viewerRender?.matches ?? [];
 
     return matches
       .filter((m) => m.round_id === roundId)
@@ -39,9 +41,11 @@ export class ReasignarCompetidorComponent {
     public dialogRef: MatDialogRef<ReasignarCompetidorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    console.log('Data recibida en modal ->', data);
     this.itemBracketsSelect = data.itemBracketsSelect;
     this.torneoData = data.torneoData;
     this.idOpponent = data.idOpponent;
+    this.viewerData = data.viewerData;
 
     // Crear el mapa solo una vez
     this.participantsMap = new Map(

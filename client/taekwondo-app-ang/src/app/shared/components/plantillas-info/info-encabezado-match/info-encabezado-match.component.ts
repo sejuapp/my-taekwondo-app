@@ -12,6 +12,7 @@ import { AllSharedImports } from '@app/shared/all-shared-imports';
 export class InfoEncabezadoMatchComponent {
   @Input() itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
   @Output() cambiarCompetidor = new EventEmitter<IOpponentBracketSelect | null>();
+  @Output() declararGanador = new EventEmitter<IOpponentBracketSelect | null>();
 
 
   opponentClick = signal<IOpponentBracketSelect | null>(null);
@@ -48,6 +49,10 @@ export class InfoEncabezadoMatchComponent {
 
   onCambiarCompetidor() {
     this.cambiarCompetidor.emit(this.opponentClick());
+  }
+
+  onDeclararGanador() {
+    this.declararGanador.emit(this.opponentClick());
   }
 
 }
