@@ -1,1 +1,131 @@
-@use '../plantilla-info-general.scss';
+.opponent-icon {
+  margin-right: 8px !important;
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Contenido del panel optimizado */
+.panel-content {
+  padding: 12px 16px !important;
+  background-color: #fafafa;
+}
+
+/* Fila de información horizontal con flex centrado */
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* Items de información compactos con tamaño fijo */
+.info-item-compact {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 6px;
+  padding: 8px 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* Tamaño fijo de 130px */
+  flex: 0 0 130px;
+  min-width: 130px;
+  max-width: 130px;
+}
+
+.info-icon-small {
+  color: #666;
+  margin-right: 8px;
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.info-content-compact {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.info-label-small {
+  font-size: 10px;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.info-value-compact {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Estilos para los cinturones compactos */
+.cinturon-badge {
+  padding: 2px 6px !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+  display: inline-block !important;
+  width: fit-content !important;
+}
+
+.cinturon-amarillo {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.cinturon-verde {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #00b894;
+}
+
+.cinturon-azul {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #74b9ff;
+}
+
+.cinturon-rojo {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #e17055;
+}
+
+.cinturon-negro {
+  background-color: #d6d8db;
+  color: #383d41;
+  border: 1px solid #2d3436;
+}
+
+.cinturon-null {
+  background-color: #d6d8db;
+  color: #ffffff;
+  border: 1px solid #faf5f5;
+}
+
+/* Item de acción centrado con el resto */
+.compact-button {
+  height: 36px !important;
+  font-size: 12px !important;
+  padding: 0 12px !important;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.compact-button mat-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin-right: 4px !important;
+}
