@@ -65,6 +65,12 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     return Boolean(opponentClick);
   });
 
+  sePuedeReiniciar = computed(() => {
+    const match = this.itemBracketsSelect()?.match;
+    if (!match) return false;
+
+    return Boolean(match.opponent1?.result && match.opponent2?.result);
+  });
 
   get menuOptionsDynamic(): MenuOption[] {
     return [
@@ -85,6 +91,13 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
         action: () => this.asignarGanadorBrackets(),
         show: !this.existeGanador(),
         variant: 'warning'
+      },
+      {
+        label: 'Reiniciar resultado',
+        icon: 'settings_backup_restore',
+        action: () => this.reiniciarMatchResults(),
+        show: this.sePuedeReiniciar(),
+        variant: 'danger'
       }
     ];
   }
@@ -253,13 +266,15 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
 
     await this.updateWinner(matchId, opponentId);
 
-    /*
-    setTimeout(async () => {
-      console.log('reset');
-      await this.bracketsManager?.reset.matchResults(matchId);
-      await this.refreshRender();
-    }, 5000)
-    */
+  }
+
+  async reiniciarMatchResults() {
+    const idMatch = (this.itemBracketsSelect()?.match.id ?? 0).toString();
+
+    const matchId = parseInt(idMatch, 10);
+
+    await this.bracketsManager?.reset.matchResults(matchId);
+    await this.refreshRender();
   }
 
   async updateWinner(matchId: number, opponentWinnerId: number) {
