@@ -1,10 +1,6 @@
 import { Component, computed, Inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  IItemBracketsSelect,
-  IOpcionSeleccionar,
-  IOpponentBracketSelect,
-} from '@app/interface/item-brackets-select';
+import { IItemBracketsSelect, IOpcionSeleccionar, IOpponentBracketSelect } from '@app/interface/item-brackets-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
 import { InfoEncabezadoMatchComponent } from '@app/shared/components/plantillas-info/info-encabezado-match/info-encabezado-match.component';
@@ -12,59 +8,26 @@ import { InfoOponentes2Component } from '@app/shared/components/plantillas-info/
 import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 
 @Component({
-  selector: 'app-opciones-seleccion',
+  selector: 'app-detalle-match',
   imports: [
-    ...AllSharedImports,
-    InfoOponentes2Component,
-    InfoEncabezadoMatchComponent,
-  ],
-  templateUrl: './opciones-seleccion.component.html',
-  styleUrl: './opciones-seleccion.component.scss',
+      ...AllSharedImports,
+      InfoOponentes2Component,
+      InfoEncabezadoMatchComponent,
+    ],
+  templateUrl: './detalle-match.component.html',
+  styleUrl: './detalle-match.component.scss'
 })
-export class OpcionesSeleccionComponent {
+export class DetalleMatchComponent {
   itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
   torneoData = signal<IGestionTorneoData | null>(null);
 
-  existeGanador = computed(() => {
-    const match = this.itemBracketsSelect()?.match;
-    if (!match) return false;
-
-    return Boolean(match.opponent1?.result || match.opponent2?.result);
-  });
-
   constructor(
-    public dialogRef: MatDialogRef<OpcionesSeleccionComponent>,
+    public dialogRef: MatDialogRef<DetalleMatchComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.itemBracketsSelect.set(data.itemBracketsSelect);
     this.torneoData.set(data.torneoData);
   }
-
-  onCambiarCompetidor(opponentBracketSelect: IOpponentBracketSelect | null): void {
-    if (!opponentBracketSelect) return;
-
-    const data: IOpcionSeleccionar = {
-      accion: AccionCompetidorEnum.CAMBIAR,
-      dataSeleccion: {
-        idOpponentAnterior: opponentBracketSelect.opponent.id,
-      }
-    };
-    this.dialogRef.close(data);
-  }
-
-  onDeclararGanador(opponentBracketSelect: IOpponentBracketSelect | null): void {
-    if (!opponentBracketSelect) return;
-
-    const data: IOpcionSeleccionar = {
-      accion: AccionCompetidorEnum.ASIGNAR_GANADOR,
-      dataSeleccion : {
-        idOpponentWinner : opponentBracketSelect.opponent.id
-      }
-    };
-    this.dialogRef.close(data);
-  }
-
-
 
   cerrar(): void {
     this.dialogRef.close();

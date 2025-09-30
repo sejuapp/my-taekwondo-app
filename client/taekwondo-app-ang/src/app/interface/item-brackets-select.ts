@@ -4,6 +4,7 @@ import { IdOpponent } from "@app/type/type-brackets";
 import { Match, Result } from "brackets-model";
 
 export interface IItemBracketsSelect {
+  idOpponentClick : IdOpponent;
   match: Match;
   customOpponents: IOpponentBracketSelect[];
 }

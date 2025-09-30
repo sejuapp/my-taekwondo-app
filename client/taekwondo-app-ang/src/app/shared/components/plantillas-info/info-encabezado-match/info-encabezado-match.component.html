@@ -10,16 +10,11 @@
               <mat-icon class="opponent-small-icon" [ngClass]="$index === 0 ? 'blue' : 'red'">person</mat-icon>
               Oponente {{ $index + 1 }}
 
-              <strong *ngIf="isWinner(item)" class="winner-color-txt">
-                - (Ganador)
-              </strong>
-
               <div class="flex-grow-1 text-end">
-                <mat-icon class="pointer" [matMenuTriggerFor]="menu1" (click)="onMenuIconClick(item)">
-                  more_vert
-                </mat-icon>
+                <strong *ngIf="isWinner(item)" class="winner-color-txt">
+                  (Ganador)
+                </strong>
               </div>
-
             </div>
 
             <!-- opponent name -->
@@ -27,25 +22,7 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
   }
 </div>
-
-<mat-menu #menu1="matMenu">
-
-  <div class="menu-content">
-
-    @if(sePuedeCambiar()){
-    <button mat-menu-item (click)="onCambiarCompetidor()">Cambiar oponente</button>
-    }
-
-    @if (!existeGanador()) {
-    <button mat-menu-item (click)="onDeclararGanador()">Declarar ganador</button>
-    }
-
-
-  </div>
-
-</mat-menu>

@@ -1,0 +1,24 @@
+<button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="menu1" [ngStyle]="{
+    position: 'fixed',
+    top: yPosition,
+    left: xPosition,
+    opacity: 0,
+    pointerEvents: 'none'
+  }"></button>
+
+
+<mat-menu #menu1="matMenu" [hasBackdrop]="true"
+  class="styled-menu-panel">
+  <div class="menu-content">
+    @for (option of options; track option.label) {
+    @if (option.show !== false) {
+    <button mat-menu-item (click)="option.action()" class="menu-item-custom"
+      [class.variant-warning]="option.variant === 'warning'" [class.variant-success]="option.variant === 'success'"
+      [class.variant-danger]="option.variant === 'danger'">
+      <mat-icon class="menu-icon">{{ option.icon }}</mat-icon>
+      <span class="menu-text">{{ option.label }}</span>
+    </button>
+    }
+    }
+  </div>
+</mat-menu>

@@ -7,6 +7,8 @@ import {
   OnInit,
   signal,
   DestroyRef,
+  ViewChild,
+  computed,
 } from '@angular/core';
 import {
   IItemBracketsSelect,
@@ -17,25 +19,28 @@ import { IResponseSelectMatch } from '@app/interface/response-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { ViewerService } from '@app/services/viewer-service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
-import { OpcionesSeleccionComponent } from '@app/shared/components/modales/opciones-seleccion/opciones-seleccion.component';
 import { DialogService } from '@app/shared/services/dialog.service';
-import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 import { ReasignarCompetidorComponent } from '@app/shared/components/modales/reasignar-competidor/reasignar-competidor.component';
-import { filter } from 'rxjs';
 import { IParticipantCategoria } from '@app/interface/request/info-torneo-categoria';
 import { IdOpponent } from '@app/type/type-brackets';
 import { generateId } from '@app/utils/id-generator';
 import { TournamentService } from '@app/services/tournament-service';
 import { BracketsManager } from 'brackets-manager';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { DetalleMatchComponent } from '@app/shared/components/modales/detalle-match/detalle-match.component';
+import { MatMenuStyledComponent, MenuOption } from '@app/shared/components/menus/mat-menu-styled/mat-menu-styled/mat-menu-styled.component';
 
 @Component({
   selector: 'app-gestion-torneo',
-  imports: [...AllSharedImports],
+  imports: [...AllSharedImports, MatMenuStyledComponent],
   templateUrl: './gestion-torneo.component.html',
   styleUrl: './gestion-torneo.component.scss',
 })
 export class GestionTorneoComponent implements OnInit, AfterViewInit {
+  @ViewChild('styledMenu') styledMenu!: MatMenuStyledComponent;
   @Input() torneoData: IGestionTorneoData | null = null;
+
+  menuTopLeft = { x: '0px', y: '0px' };
 
   viewerId: string = `V_${generateId()}`;
   bracketsManager: BracketsManager | null = null;
@@ -46,6 +51,43 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   // --- Signals ---
   participantsMap = signal<Map<number, any>>(new Map());
   itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
+
+
+  existeGanador = computed(() => {
+    const match = this.itemBracketsSelect()?.match;
+    if (!match) return false;
+
+    return Boolean(match.opponent1?.result || match.opponent2?.result);
+  });
+
+  sePuedeCambiar = computed(() => {
+    const opponentClick = this.itemBracketsSelect()?.idOpponentClick;
+    return Boolean(opponentClick);
+  });
+
+
+  get menuOptionsDynamic(): MenuOption[] {
+    return [
+      {
+        label: 'Ver detalle enfrentamiento',
+        icon: 'visibility',
+        action: () => this.openModalDetalleMatch()
+      },
+      {
+        label: 'Cambiar competidor',
+        icon: 'swap_horiz',
+        action: () => this.openModalReasignar(),
+        show: this.sePuedeCambiar() // Se evalúa cada vez que se abre el menú
+      },
+      {
+        label: 'Declarar ganador',
+        icon: 'emoji_events',
+        action: () => this.asignarGanadorBrackets(),
+        show: !this.existeGanador(),
+        variant: 'warning'
+      }
+    ];
+  }
 
   constructor(
     private _tournamentService: TournamentService,
@@ -105,10 +147,16 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     this.itemBracketsSelect.set(mappedItem);
 
     // Abrimos el modal con las opciones disponibles
-    this.openModalOpcionesSeleccion();
+    this.openMenuOpciones(message);
   }
 
+  private openMenuOpciones(message: IResponseSelectMatch) {
+    this.menuTopLeft.x = message.coordinates.x + 'px';
+    this.menuTopLeft.y = message.coordinates.y + 'px';
 
+    // Abre el menú en la posición del clic
+    this.styledMenu.openMenu();
+  }
 
   async refreshRender() {
     if (!this.bracketsManager) {
@@ -135,6 +183,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       );
     }
     return {
+      idOpponentClick: message.idOpponent,
       match: match,
       customOpponents: [
         this.buildOpponent(match?.opponent1),
@@ -179,7 +228,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   /**
    * Abre el modal de opciones de selección
    */
-  private openModalOpcionesSeleccion(): void {
+  openModalDetalleMatch(): void {
     const currentItem = this.itemBracketsSelect();
     if (!currentItem) return;
 
@@ -188,34 +237,19 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       torneoData: this.torneoData,
     };
 
-    const dialogRef = this._dialogService.open(
-      OpcionesSeleccionComponent,
+    this._dialogService.open(
+      DetalleMatchComponent,
       dialogData
     );
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        filter((result: IOpcionSeleccionar) => !!result)
-      )
-      .subscribe((result: IOpcionSeleccionar) => {
-
-        if (result.accion === AccionCompetidorEnum.CAMBIAR) {
-          this.openModalReasignar(result);
-        }
-        if (result.accion === AccionCompetidorEnum.ASIGNAR_GANADOR) {
-          this.asignarGanador(result);
-        }
-      });
   }
 
-  private async asignarGanador(result: IOpcionSeleccionar) {
-    const idMatch = (this.itemBracketsSelect()?.match.id ?? 0).toString();
-    let idOpponentWinner = (result?.dataSeleccion.idOpponentWinner ?? 0).toString();
 
-    const matchId = parseInt(idMatch);
-    const opponentId = parseInt(idOpponentWinner);
+  async asignarGanadorBrackets() {
+    const idMatch = (this.itemBracketsSelect()?.match.id ?? 0).toString();
+    let idOpponentWinner = (this.itemBracketsSelect()?.idOpponentClick ?? 0).toString();
+
+    const matchId = parseInt(idMatch, 10);
+    const opponentId = parseInt(idOpponentWinner, 10);
 
     await this.updateWinner(matchId, opponentId);
 
@@ -257,9 +291,8 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   /**
    * Abre el modal para reasignar un competidor
    */
-  openModalReasignar(result: IOpcionSeleccionar) {
+  openModalReasignar() {
     const data = {
-      idOpponent: result.dataSeleccion.idOpponentAnterior,
       itemBracketsSelect: this.itemBracketsSelect(),
       torneoData: this.torneoData,
       viewerData: this.viewerData,
@@ -281,7 +314,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
         }
 
         console.log(`[${this.viewerId}] 🔄 Reasignación result:`, nuevoOponente);
-        this.reasignar(data.idOpponent, nuevoOponente);
+        this.reasignar(this.itemBracketsSelect()?.idOpponentClick, nuevoOponente);
       });
   }
 

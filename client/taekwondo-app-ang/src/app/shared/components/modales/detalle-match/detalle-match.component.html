@@ -1,10 +1,8 @@
 <mat-card-custom>
   <mat-card-header>
-    <mat-card-title>Opciones del encuentro</mat-card-title>
+    <mat-card-title>Detalle del encuentro</mat-card-title>
     <mat-card-subtitle>
-      De click sobre el icono<mat-icon> more_vert </mat-icon>
-      ubicado en la parte superior derecha de cada oponente para ver las
-      opciones disponibles.
+      Se visualiza la información de los competidores
     </mat-card-subtitle>
   </mat-card-header>
 
@@ -12,8 +10,6 @@
     <mat-dialog-content>
       <app-info-encabezado-match
         [itemBracketsSelect]="itemBracketsSelect"
-        (cambiarCompetidor)="onCambiarCompetidor($event)"
-        (declararGanador)="onDeclararGanador($event)"
       ></app-info-encabezado-match>
 
       <div class="row">
