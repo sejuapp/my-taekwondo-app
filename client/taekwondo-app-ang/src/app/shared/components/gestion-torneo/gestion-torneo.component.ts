@@ -12,23 +12,21 @@ import {
 } from '@angular/core';
 import {
   IItemBracketsSelect,
-  IOpcionSeleccionar,
   IOpponentBracketSelect,
 } from '@app/interface/item-brackets-select';
 import { IResponseSelectMatch } from '@app/interface/response-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
-import { ViewerService } from '@app/services/viewer-service';
+import { ViewerService } from '@app/services/brackets/viewer-service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
-import { DialogService } from '@app/shared/services/dialog.service';
+import { DialogService } from '@app/services/dialog.service';
 import { ReasignarCompetidorComponent } from '@app/shared/components/modales/reasignar-competidor/reasignar-competidor.component';
 import { IParticipantCategoria } from '@app/interface/request/info-torneo-categoria';
 import { IdOpponent } from '@app/type/type-brackets';
-import { generateId } from '@app/utils/id-generator';
-import { TournamentService } from '@app/services/tournament-service';
 import { BracketsManager } from 'brackets-manager';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { DetalleMatchComponent } from '@app/shared/components/modales/detalle-match/detalle-match.component';
 import { MatMenuStyledComponent, MenuOption } from '@app/shared/components/menus/mat-menu-styled/mat-menu-styled/mat-menu-styled.component';
+import { generateId } from '@app/core/utils';
+import { TournamentService } from '@app/services/brackets/tournament-service';
 
 @Component({
   selector: 'app-gestion-torneo',

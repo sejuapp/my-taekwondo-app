@@ -8,7 +8,8 @@ import {
 } from '@angular/core';
 import { IOpponentBracketSelect } from '@app/interface/item-brackets-select';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
-import { HelperService } from '@app/shared/services/helper.service';
+import { HelperService } from '@app/services/helper.service';
+import { getEdad } from '@app/core/utils';
 
 interface OpponentDataRow {
   icon: string;
@@ -63,7 +64,7 @@ export class InfoOponentes2Component implements OnChanges {
         data[0][llave] = persona.cinturon ?? null;
         data[1][llave] = persona.peso ?? null;
         data[2][llave] = persona.altura ?? null;
-        data[3][llave] = this._helperService.getEdad(
+        data[3][llave] = getEdad(
           persona.fechaNacimiento ?? null
         );
       }

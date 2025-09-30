@@ -2,7 +2,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IPersonaCategoria } from '@app/interface/request/info-torneo-categoria';
-import { HelperService } from '@app/shared/services/helper.service';
+import { HelperService } from '@app/services/helper.service';
 
 @Component({
   selector: 'app-info-oponentes-1',
