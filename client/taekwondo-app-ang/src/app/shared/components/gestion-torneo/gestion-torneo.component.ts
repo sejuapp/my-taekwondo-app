@@ -52,12 +52,14 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   participantsMap = signal<Map<number, IParticipantCategoria | null>>(new Map());
   itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
 
-
-  existeGanador = computed(() => {
+  declararGanador = computed(() => {
     const match = this.itemBracketsSelect()?.match;
     if (!match) return false;
 
-    return Boolean(match.opponent1?.result || match.opponent2?.result);
+    const ambosOponentesExisten = Boolean(match?.opponent1?.id && match?.opponent2?.id);
+    const ambosYaTienenResultado = Boolean(match.opponent1?.result && match.opponent2?.result);
+
+    return Boolean(ambosOponentesExisten && !ambosYaTienenResultado);
   });
 
   sePuedeCambiar = computed(() => {
@@ -83,13 +85,13 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
         label: 'Cambiar competidor',
         icon: 'swap_horiz',
         action: () => this.openModalReasignar(),
-        show: this.sePuedeCambiar() // Se evalúa cada vez que se abre el menú
+        show: this.sePuedeCambiar()
       },
       {
         label: 'Declarar ganador',
         icon: 'emoji_events',
         action: () => this.asignarGanadorBrackets(),
-        show: !this.existeGanador(),
+        show: this.declararGanador(),
         variant: 'warning'
       },
       {
@@ -110,7 +112,6 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     private _dialogService: DialogService,
     private destroyRef: DestroyRef
   ) {
-      this._messageService.mostrarMensaje(`La información se guardo con exito`, 'success');
 
   }
 
@@ -263,23 +264,29 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
 
 
   async asignarGanadorBrackets() {
-    this.styledMenu.closeMenu();
 
-    const idMatch = (this.itemBracketsSelect()?.match.id ?? 0).toString();
-    let idOpponentWinner = (this.itemBracketsSelect()?.idOpponentClick ?? 0).toString();
+    try {
+      this.styledMenu.closeMenu();
 
-    const matchId = parseInt(idMatch, 10);
-    const opponentId = parseInt(idOpponentWinner, 10);
+      const idMatch = (this.itemBracketsSelect()?.match.id ?? 0).toString();
+      let idOpponentWinner = (this.itemBracketsSelect()?.idOpponentClick ?? 0).toString();
 
-    const oponente = this.getOpponent(opponentId);
+      const matchId = parseInt(idMatch, 10);
+      const opponentId = parseInt(idOpponentWinner, 10);
 
-    const confirmacion = await this._messageService.confirmarMensaje(`¿Estás seguro de dar como ganador a <br> <strong> ${oponente?.bracket.name} </strong>?`, 'question');
+      const oponente = this.getOpponent(opponentId);
 
-    if (confirmacion) {
-      this._loadingBackdropService.show();
-      await this.updateWinner(matchId, opponentId);
+      const confirmacion = await this._messageService.confirmarMensaje(`¿Estás seguro de dar como ganador a <br> <strong> ${oponente?.bracket.name} </strong>?`, 'question');
+
+      if (confirmacion) {
+        this._loadingBackdropService.show();
+        await this.updateWinner(matchId, opponentId);
+        this._loadingBackdropService.hide();
+        this._messageService.mostrarMensaje(`<strong> ${oponente?.bracket.name} </strong> es el ganador`, 'success');
+      }
+    } catch (error) {
       this._loadingBackdropService.hide();
-      this._messageService.mostrarMensaje(`<strong> ${oponente?.bracket.name} </strong> es el ganador`, 'success');
+      this._messageService.mostrarMensaje(`Ocurrio un error al intentar declarar un ganador`, 'error');
     }
 
   }
