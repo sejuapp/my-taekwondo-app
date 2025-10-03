@@ -27,6 +27,8 @@ import { DetalleMatchComponent } from '@app/shared/components/modales/detalle-ma
 import { MatMenuStyledComponent, MenuOption } from '@app/shared/components/menus/mat-menu-styled/mat-menu-styled/mat-menu-styled.component';
 import { generateId } from '@app/core/utils';
 import { TournamentService } from '@app/services/brackets/tournament-service';
+import { LoadingBackdropService } from '@app/services/message/loading-backdrop.service';
+import { MessageService } from '@app/services/message/message.service';
 
 @Component({
   selector: 'app-gestion-torneo',
@@ -47,7 +49,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   NOMBRE_SIN_ASIGNACION = 'Sin asignar';
 
   // --- Signals ---
-  participantsMap = signal<Map<number, any>>(new Map());
+  participantsMap = signal<Map<number, IParticipantCategoria | null>>(new Map());
   itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
 
 
@@ -101,11 +103,16 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
+    private _loadingBackdropService: LoadingBackdropService,
+    private _messageService: MessageService,
     private _tournamentService: TournamentService,
     private viewerService: ViewerService,
     private _dialogService: DialogService,
     private destroyRef: DestroyRef
-  ) { }
+  ) {
+      this._messageService.mostrarMensaje(`La información se guardo con exito`, 'success');
+
+  }
 
   ngOnInit(): void {
     console.log(`✅ [${this.viewerId}] Componente inicializado`);
@@ -223,7 +230,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   /**
    * Busca un participante por id en el mapa
    */
-  private getOpponent(opponentId: any): any | null {
+  private getOpponent(opponentId: any): IParticipantCategoria | null {
     return opponentId != null
       ? this.participantsMap().get(opponentId) ?? null
       : null;
@@ -256,13 +263,24 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
 
 
   async asignarGanadorBrackets() {
+    this.styledMenu.closeMenu();
+
     const idMatch = (this.itemBracketsSelect()?.match.id ?? 0).toString();
     let idOpponentWinner = (this.itemBracketsSelect()?.idOpponentClick ?? 0).toString();
 
     const matchId = parseInt(idMatch, 10);
     const opponentId = parseInt(idOpponentWinner, 10);
 
-    await this.updateWinner(matchId, opponentId);
+    const oponente = this.getOpponent(opponentId);
+
+    const confirmacion = await this._messageService.confirmarMensaje(`¿Estás seguro de dar como ganador a <br> <strong> ${oponente?.bracket.name} </strong>?`, 'question');
+
+    if (confirmacion) {
+      this._loadingBackdropService.show();
+      await this.updateWinner(matchId, opponentId);
+      this._loadingBackdropService.hide();
+      this._messageService.mostrarMensaje(`<strong> ${oponente?.bracket.name} </strong> es el ganador`, 'success');
+    }
 
   }
 

@@ -11,7 +11,7 @@ export interface IItemBracketsSelect {
 
 export interface IOpponentBracketSelect {
   opponent : IOpponentSelect;
-  participant : IParticipantCategoria; //Es el item de la lista que viene de la bd
+  participant : IParticipantCategoria  | null; //Es el item de la lista que viene de la bd
 }
 
 export interface IOpcionSeleccionar  {

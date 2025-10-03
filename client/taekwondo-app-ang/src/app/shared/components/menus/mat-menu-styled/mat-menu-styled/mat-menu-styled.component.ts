@@ -30,4 +30,8 @@ export class MatMenuStyledComponent {
     this.menuTrigger.openMenu();
   }
 
+  closeMenu() {
+    this.menuTrigger.closeMenu();
+  }
+
 }
