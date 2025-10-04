@@ -1,0 +1,28 @@
+<div class="row">
+  @for (item of itemBracketsSelect()?.customOpponents; track $index) {
+  <div class="col-12 col-sm-6 col-md-6 mb-3">
+    <div class="opponent-card" [class.red-accent]="$index === 1">
+      <div class="opponent-card-content">
+        <div class="opponent-header">
+          <div class="opponent-info">
+            <!-- opponent number -->
+            <div class="opponent-number" [class.winner-color-number]="isWinner(item)">
+              <mat-icon class="opponent-small-icon" [ngClass]="$index === 0 ? 'blue' : 'red'">person</mat-icon>
+              Oponente {{ $index + 1 }}
+
+              <div class="flex-grow-1 text-end">
+                <strong *ngIf="isWinner(item)" class="winner-color-txt">
+                  (Ganador)
+                </strong>
+              </div>
+            </div>
+
+            <!-- opponent name -->
+            <div class="opponent-name" [innerHTML]="obtenerNombreYClub(item)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

@@ -5,13 +5,23 @@
   </mat-card-header>
 
   <mat-card-content>
-    <mat-dialog-content>
-      <strong>{{ competidorAntiguo()?.bracket?.name }}</strong>
-      <br /><br />
 
-      @for (item of competidoresRonda(); track item.bracket.id) {
-        {{ item?.bracket?.name }}<br />
-      }
+    <mat-dialog-content>
+
+      <p>Elija al participante por el cual sera sustituido <strong>{{ competidorAntiguo()?.bracket?.name }}</strong></p>
+
+      <mat-list>
+        @for (item of competidoresRonda(); track item.bracket.id) {
+        <mat-list-item>
+          <span matListItemTitle>{{ item?.bracket?.name }}</span>
+          <button mat-icon-button matListItemMeta type="button" (click)="onCambiarCompetidor(item)">
+            <mat-icon>swap_horiz</mat-icon>
+          </button>
+        </mat-list-item>
+        <mat-divider class="divider-spacing"></mat-divider>
+        }
+      </mat-list>
+
     </mat-dialog-content>
   </mat-card-content>
 

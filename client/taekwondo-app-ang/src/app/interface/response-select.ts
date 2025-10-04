@@ -1,8 +1,9 @@
-import { Match } from 'brackets-model';
+import { IdOpponent } from '@app/type/type-brackets';
 
 export interface IResponseSelectMatch {
-  match: Match;
-  coordinates: ICoordinates
+  idMatch: number;
+  idOpponent: IdOpponent;
+  coordinates: ICoordinates,
 }
 
 export interface ICoordinates {

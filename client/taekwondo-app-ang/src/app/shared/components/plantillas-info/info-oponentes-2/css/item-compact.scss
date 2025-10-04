@@ -1,0 +1,46 @@
+/* Items de información compactos con tamaño fijo */
+.info-item-compact {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 6px;
+  //padding: 8px 0px;
+  //box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* Tamaño fijo de 130px */
+  flex: 0 0 130px;
+  min-width: 130px;
+  max-width: 130px;
+}
+
+.info-icon-small {
+  color: #666;
+  margin-right: 8px;
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.info-content-compact {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.info-label-small {
+  font-size: 10px;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.info-value-compact {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

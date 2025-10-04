@@ -1,0 +1,26 @@
+<mat-card-custom>
+  <mat-card-header>
+    <mat-card-title>Detalle del encuentro</mat-card-title>
+    <mat-card-subtitle>
+      Se visualiza la información de los competidores
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-dialog-content>
+      <app-info-encabezado-match
+        [itemBracketsSelect]="itemBracketsSelect"
+      ></app-info-encabezado-match>
+
+      <div class="row">
+        <app-info-oponentes-2
+          [customOpponents]="itemBracketsSelect()?.customOpponents ?? []"
+        ></app-info-oponentes-2>
+      </div>
+    </mat-dialog-content>
+  </mat-card-content>
+
+  <mat-card-actions class="custom-actions">
+    <button mat-button (click)="cerrar()">Cerrar</button>
+  </mat-card-actions>
+</mat-card-custom>

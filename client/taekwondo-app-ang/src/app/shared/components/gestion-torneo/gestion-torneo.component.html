@@ -1,1 +1,8 @@
-<div [id]="torneoId" class="brackets-viewer"></div>
+<mat-card-subtitle>
+  De click sobre cada oponente para ver las opciones disponibles.
+</mat-card-subtitle>
+
+<div [id]="viewerId" class="brackets-viewer"></div>
+
+<app-mat-menu-styled #styledMenu [options]="menuOptionsDynamic" [yPosition]="menuTopLeft.y"
+  [xPosition]="menuTopLeft.x"></app-mat-menu-styled>

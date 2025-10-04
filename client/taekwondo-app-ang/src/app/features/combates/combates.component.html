@@ -5,9 +5,8 @@
   </mat-card-header>
 
   <mat-card-content class="custom-content">
-    @for (item of tournamentsData(); track item.miTorneo.stage.tournamentId) {
+    @for (item of tournamentsData(); track $index) {
       <app-gestion-torneo
-        [torneoId]="item.miTorneo.stage.tournamentId"
         [torneoData]="item">
       </app-gestion-torneo>
     }

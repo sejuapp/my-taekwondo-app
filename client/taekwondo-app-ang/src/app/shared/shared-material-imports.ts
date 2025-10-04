@@ -10,9 +10,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCustomCardComponent } from '@app/wrapper/custom-card.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 export const SharedMaterialImports = [
   MatButtonModule,
@@ -27,7 +29,9 @@ export const SharedMaterialImports = [
   MatCheckboxModule,
   MatCustomCardComponent,
   DragDropModule,
-  FlexLayoutModule,
   MatMenuModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatListModule,
+  MatChipsModule,
+  MatButtonToggleModule
 ];
