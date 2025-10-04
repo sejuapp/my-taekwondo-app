@@ -19,9 +19,7 @@ export class ViewerService {
    */
   async initializeViewer(
     selectorId: string | number,
-    viewerData: any
   ): Promise<Observable<IResponseSelectMatch>> {
-    await this.viewerRender(selectorId, viewerData);
     return this.setupBracketEvents(selectorId);
   }
 

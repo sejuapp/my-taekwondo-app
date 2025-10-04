@@ -108,7 +108,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     private _loadingBackdropService: LoadingBackdropService,
     private _messageService: MessageService,
     private _tournamentService: TournamentService,
-    private viewerService: ViewerService,
+    private _viewerService: ViewerService,
     private _dialogService: DialogService,
     private destroyRef: DestroyRef
   ) {
@@ -132,17 +132,18 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       )
     );
 
+
+    //Iniciamos el manager del torneo
     this.bracketsManager = await this._tournamentService.createBracketsManager(this.viewerId, this.torneoData.miTorneoCategoria);
-    this.viewerData = await this._tournamentService.getViewerData(this.bracketsManager);
+    //Construimos y renderizamos segun el bracketsManager
+    this.buildRender();
 
-    console.log(`⚙️ [${this.viewerId}] Inicializando visor... `, this.viewerData);
-
-    // Inicializamos el visor y escuchamos eventos de selección de matches
-    const matchActionObservable = await this.viewerService.initializeViewer(
-      this.viewerId,
-      this.viewerData.viewerRender
+    //Creamos el  observable de eventos de selección de match
+    const matchActionObservable = await this._viewerService.initializeViewer(
+      this.viewerId
     );
 
+    //Escuchamos eventos de selección de
     matchActionObservable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (message: IResponseSelectMatch) => {
         // 🔔 Log único para cuando llega un mensaje
@@ -177,18 +178,24 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     this.styledMenu.openMenu();
   }
 
-  async refreshRender() {
+  /**
+   * Método que contruye los datos a partir del bracketsManager y los muestra en pantalla
+   * @param rebuildManager true si se requiere reconstruir el bracketsManager, solo para eventos forzados como cambio de oponentes.
+   */
+  async buildRender(rebuildManager: boolean = false) {
     if (!this.bracketsManager) {
       console.error(`[${this.viewerId}] ❌ bracketsManager es null, no se puede refrescar el visor.`);
       return;
     }
 
-    this.viewerData = await this._tournamentService.getViewerData(this.bracketsManager);
+    if (rebuildManager && this.torneoData) {
+      this.bracketsManager = await this._tournamentService.createBracketsManager(this.viewerId, this.torneoData.miTorneoCategoria, this.viewerData.viewerRender);
+    }
 
-    await this.viewerService.viewerRender(
-      this.viewerId,
-      this.viewerData?.viewerRender
-    );
+    //Generamos los datos del visualizador
+    this.viewerData = await this._tournamentService.getViewerData(this.bracketsManager);
+    //Renderizamos en pantalla los datos del visualizador
+    await this._viewerService.viewerRender(this.viewerId, this.viewerData.viewerRender);
   }
 
   /**
@@ -264,7 +271,6 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
 
 
   async asignarGanadorBrackets() {
-
     try {
       this.styledMenu.closeMenu();
 
@@ -279,13 +285,12 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       const confirmacion = await this._messageService.confirmarMensaje(`¿Estás seguro de dar como ganador a <br> <strong> ${oponente?.bracket.name} </strong>?`, 'question');
 
       if (confirmacion) {
-        this._loadingBackdropService.show();
         await this.updateWinner(matchId, opponentId);
         this._loadingBackdropService.hide();
         this._messageService.mostrarMensaje(`<strong> ${oponente?.bracket.name} </strong> es el ganador`, 'success');
       }
     } catch (error) {
-      this._loadingBackdropService.hide();
+      console.log('Error :::> ', error);
       this._messageService.mostrarMensaje(`Ocurrio un error al intentar declarar un ganador`, 'error');
     }
 
@@ -297,7 +302,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     const matchId = parseInt(idMatch, 10);
 
     await this.bracketsManager?.reset.matchResults(matchId);
-    await this.refreshRender();
+    await this.buildRender();
   }
 
   async updateWinner(matchId: number, opponentWinnerId: number) {
@@ -309,19 +314,16 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       let llave: any = { id: matchId };
 
       if (match?.opponent1?.id == opponentWinnerId) {
-        llave['opponent1'] = { result: 'win' };
+        llave.opponent1 = { result: 'win' };
       }
 
       if (match?.opponent2?.id == opponentWinnerId) {
-        llave['opponent2'] = { result: 'win' };
+        llave.opponent2 = { result: 'win' };
       }
 
-      await this.bracketsManager?.update.match({
-        id: matchId,
-        opponent1: { result: 'win' }
-      });
+      await this.bracketsManager?.update.match(llave);
 
-      await this.refreshRender();
+      await this.buildRender();
     }
 
   }
@@ -389,10 +391,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
       this.intercambiarOponente(item, nuevoOponenteId, idOponenteAnterior);
     })
 
-    if (this.torneoData?.miTorneoCategoria) {
-      this.bracketsManager = await this._tournamentService.createBracketsManager(this.viewerId, this.torneoData.miTorneoCategoria, this.viewerData.viewerRender);
-      this.refreshRender();
-    }
+    await this.buildRender(true);
   }
 
   /**

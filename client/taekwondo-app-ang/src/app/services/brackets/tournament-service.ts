@@ -50,7 +50,7 @@ export class TournamentService {
       // Crear desde cero
       db.setData({
         participant: lstParticipants.map((player: any) => ({
-          ...player,
+          ...player.id,
           tournament_id: bracketsId,
         })),
         stage: [],
@@ -85,9 +85,13 @@ export class TournamentService {
 
   async getViewerData(bracketsManager: BracketsManager) {
     const data = await bracketsManager.export();
-
     return {
       viewerRender: {
+        //Necesarios para actualizar los cambios en el manager
+        groups: data.group,
+        rounds: data.round,
+
+        //Necesarios para renderizar
         stages: data.stage,
         matches: data.match,
         matchGames: data.match_game,
