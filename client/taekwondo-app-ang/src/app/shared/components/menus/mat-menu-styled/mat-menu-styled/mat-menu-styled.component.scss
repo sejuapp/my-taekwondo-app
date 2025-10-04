@@ -1,7 +1,6 @@
 ::ng-deep .styled-menu-panel {
  .mat-mdc-menu-content {
     padding: 8px 0 !important;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.12) 0%, #ffffff 100%) !important
   }
 
   .menu-content {
@@ -33,7 +32,6 @@
     }
 
     .menu-icon {
-      color: #5f6368;
       font-size: 20px;
       width: 20px;
       height: 20px;
@@ -44,25 +42,7 @@
     .menu-text {
       font-size: 14px;
       font-weight: 500;
-      color: #202124;
       z-index: 1;
-    }
-
-    &:hover {
-      background-color: rgba(63, 81, 181, 0.08) !important;
-      border-left-color: #3f51b5;
-
-      &::before {
-        width: 100%;
-      }
-
-      .menu-icon {
-        color: #3f51b5;
-      }
-
-      .menu-text {
-        color: #3f51b5;
-      }
     }
 
     &:active {

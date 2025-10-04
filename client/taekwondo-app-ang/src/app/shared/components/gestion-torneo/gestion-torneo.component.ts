@@ -274,15 +274,25 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     try {
       this.styledMenu.closeMenu();
 
+      const ronda = <string>(this.itemBracketsSelect()?.match?.round_id)?.toString();
+
       const idMatch = (this.itemBracketsSelect()?.match.id ?? 0).toString();
       let idOpponentWinner = (this.itemBracketsSelect()?.idOpponentClick ?? 0).toString();
 
+      const rondaId = parseInt(ronda, 10);
       const matchId = parseInt(idMatch, 10);
       const opponentId = parseInt(idOpponentWinner, 10);
 
       const oponente = this.getOpponent(opponentId);
 
-      const confirmacion = await this._messageService.confirmarMensaje(`¿Estás seguro de dar como ganador a <br> <strong> ${oponente?.bracket.name} </strong>?`, 'question');
+      const dataMesagge = `
+        ¿Estás seguro de dar como ganador al siguiente participante el la ronda ${rondaId + 1} y enfrentamiento ${matchId + 1}? <br><br>
+        <strong>${oponente?.bracket.name} <br>
+        (${oponente?.persona.club})</strong><br>
+        <br>
+      `;
+
+      const confirmacion = await this._messageService.confirmarMensaje(dataMesagge, 'question');
 
       if (confirmacion) {
         await this.updateWinner(matchId, opponentId);
