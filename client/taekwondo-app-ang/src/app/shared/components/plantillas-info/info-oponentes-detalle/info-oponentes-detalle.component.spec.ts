@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { InfoOponentes2Component } from './info-oponentes-2.component';
+import { InfoOponentes2Component } from './info-oponentes-detalle.component';
 
 describe('InfoOponentes2Component', () => {
   let component: InfoOponentes2Component;

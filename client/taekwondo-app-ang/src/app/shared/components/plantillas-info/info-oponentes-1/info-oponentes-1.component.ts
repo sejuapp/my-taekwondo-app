@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IPersonaCategoria } from '@app/interface/request/info-torneo-categoria';
 import { HelperService } from '@app/services/helper.service';
+import { getEdad } from '@app/core/utils';
 
 @Component({
   selector: 'app-info-oponentes-1',
@@ -14,5 +15,10 @@ export class InfoOponentes1Component {
   @Input() persona: IPersonaCategoria | null = null;
 
   constructor(public _helperService : HelperService) {}
+
+
+  getEdad(fechaNacimiento : string | null) : number{
+    return getEdad(fechaNacimiento);
+  }
 
 }

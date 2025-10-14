@@ -4,7 +4,7 @@ import { IItemBracketsSelect, IOpcionSeleccionar, IOpponentBracketSelect } from 
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
 import { InfoEncabezadoMatchComponent } from '@app/shared/components/plantillas-info/info-encabezado-match/info-encabezado-match.component';
-import { InfoOponentes2Component } from '@app/shared/components/plantillas-info/info-oponentes-2/info-oponentes-2.component';
+import { InfoOponentes2Component } from '@app/shared/components/plantillas-info/info-oponentes-detalle/info-oponentes-detalle.component';
 import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 
 @Component({

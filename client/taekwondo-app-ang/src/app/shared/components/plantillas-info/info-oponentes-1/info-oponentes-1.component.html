@@ -7,7 +7,7 @@
       <div class="info-content-compact">
         <span class="info-label-small">Cinturón</span>
         <span class="info-value-compact cinturon-badge" [ngClass]="'cinturon-' + persona?.cinturon?.toLowerCase()">
-          {{ persona?.cinturon ?? 'N/A' }}
+
         </span>
       </div>
     </div>
@@ -35,7 +35,7 @@
       <mat-icon class="info-icon-small">calendar_month</mat-icon>
       <div class="info-content-compact">
         <span class="info-label-small">Edad</span>
-        <span class="info-value-compact">{{_helperService.getEdad( persona?.fechaNacimiento ?? null)}}</span>
+        <span class="info-value-compact">{{getEdad( persona?.fechaNacimiento ?? null)}}</span>
       </div>
     </div>
 

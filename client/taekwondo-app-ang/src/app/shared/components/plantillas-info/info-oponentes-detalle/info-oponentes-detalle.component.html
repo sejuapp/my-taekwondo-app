@@ -15,8 +15,8 @@
             <span class="info-label-small">{{ element.label }}</span>
 
             @if (isCinturonLabel(element.label)) {
-            <span class="info-value-compact cinturon-badge" [ngClass]="getCinturonClass(element.op1)">
-              {{ element.op1 ?? "N/A" }}
+            <span class="info-value-compact cinturon-badge" [ngClass]="'cinturon-' + element.op1?.toLowerCase()">
+
             </span>
             } @else {
             <span class="info-value-compact">
@@ -42,8 +42,8 @@
             <span class="info-label-small">{{ element.label }}</span>
 
             @if (isCinturonLabel(element.label)) {
-            <span class="info-value-compact cinturon-badge" [ngClass]="getCinturonClass(element.op2)">
-              {{ element.op2 ?? "N/A" }}
+            <span class="info-value-compact cinturon-badge" [ngClass]="'cinturon-' + element.op2?.toLowerCase()">
+
             </span>
             } @else {
             <span class="info-value-compact">

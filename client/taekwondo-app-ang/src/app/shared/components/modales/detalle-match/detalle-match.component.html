@@ -1,5 +1,9 @@
 <mat-card-custom>
   <mat-card-header>
+    <button mat-icon-button matTooltip="Cerrar ventana" (click)="cerrar()" class="icon-close-modal"
+      aria-label="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
     <mat-card-title>Detalle del encuentro</mat-card-title>
     <mat-card-subtitle>
       Se visualiza la información de los competidores
@@ -8,19 +12,11 @@
 
   <mat-card-content>
     <mat-dialog-content>
-      <app-info-encabezado-match
-        [itemBracketsSelect]="itemBracketsSelect"
-      ></app-info-encabezado-match>
+      <app-info-encabezado-match [itemBracketsSelect]="itemBracketsSelect"></app-info-encabezado-match>
 
       <div class="row">
-        <app-info-oponentes-2
-          [customOpponents]="itemBracketsSelect()?.customOpponents ?? []"
-        ></app-info-oponentes-2>
+        <app-info-oponentes-detalle [customOpponents]="itemBracketsSelect()?.customOpponents ?? []"></app-info-oponentes-detalle>
       </div>
     </mat-dialog-content>
   </mat-card-content>
-
-  <mat-card-actions class="custom-actions">
-    <button mat-button (click)="cerrar()">Cerrar</button>
-  </mat-card-actions>
 </mat-card-custom>

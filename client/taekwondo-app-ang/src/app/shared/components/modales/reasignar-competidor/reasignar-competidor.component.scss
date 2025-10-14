@@ -1,4 +1,17 @@
-.divider-spacing {
-  margin-top: 5px;
-  margin-bottom: 5px;
+.info-label-small {
+  font-size: 10px;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.mat-mdc-row {
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
 }

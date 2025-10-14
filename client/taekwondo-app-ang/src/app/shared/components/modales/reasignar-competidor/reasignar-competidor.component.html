@@ -1,31 +1,69 @@
 <mat-card-custom>
   <mat-card-header>
-    <mat-card-title>Cambiar competidor</mat-card-title>
-    <mat-card-subtitle>Se realiza el cambio del oponente seleccionado</mat-card-subtitle>
+    <button mat-icon-button matTooltip="Cerrar ventana" (click)="cerrar()" class="icon-close-modal" aria-label="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-card-title>{{ competidorAntiguo?.bracket?.name }}</mat-card-title>
+    <mat-card-subtitle style="padding: 12px 30px !important">
+      <app-info-oponentes-1 [persona]="competidorAntiguo?.persona ?? null"></app-info-oponentes-1>
+    </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
+    <p>
+      <strong>Instrucciones:</strong><br>
+      • Seleccione una fila para elegir al nuevo participante.<br>
+      • Ordene por peso, altura o edad haciendo click en los encabezados de columna.
+    </p>
 
-    <mat-dialog-content>
+    <mat-divider class="divider-spacing"></mat-divider>
+    <br />
 
-      <p>Elija al participante por el cual sera sustituido <strong>{{ competidorAntiguo()?.bracket?.name }}</strong></p>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table [dataSource]="dataSource" matSort>
 
-      <mat-list>
-        @for (item of competidoresRonda(); track item.bracket.id) {
-        <mat-list-item>
-          <span matListItemTitle>{{ item?.bracket?.name }}</span>
-          <button mat-icon-button matListItemMeta type="button" (click)="onCambiarCompetidor(item)">
-            <mat-icon>swap_horiz</mat-icon>
-          </button>
-        </mat-list-item>
-        <mat-divider class="divider-spacing"></mat-divider>
-        }
-      </mat-list>
+        <ng-container matColumnDef="competidor">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let row">{{ row?.bracket?.name }}</td>
+        </ng-container>
 
-    </mat-dialog-content>
+        <ng-container matColumnDef="cinturon">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-icon>sports_martial_arts</mat-icon> <br>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <span class="info-value-compact cinturon-badge"
+              [ngClass]="'cinturon-' + row?.persona?.cinturon?.toLowerCase()">
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="peso">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="info-label-small">
+            Peso <br>(kg)
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row?.persona?.peso }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="altura">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="info-label-small">
+            Altura <br>(cm)
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row?.persona?.altura }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="info-label-small">
+            Edad
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ getEdad(row?.persona?.fechaNacimiento ?? null) }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns" (click)="onCambiarCompetidor(row)"></tr>
+      </table>
+    </div>
   </mat-card-content>
-
-  <mat-card-actions class="custom-actions">
-    <button mat-button (click)="cerrar()">Cerrar</button>
-  </mat-card-actions>
 </mat-card-custom>

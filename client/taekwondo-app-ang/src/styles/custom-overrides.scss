@@ -9,3 +9,11 @@
   justify-content: flex-end; /* alinea a la derecha */
   padding-bottom: 20px !important; /* espacio inferior */
 }
+
+.icon-close-modal {
+  position: absolute !important;
+  top: 0px !important;
+  right: 0px !important;
+  z-index: 10 !important;
+  color: #000000 !important;
+}

@@ -13,7 +13,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         fechaNacimiento: '2013-10-25',
         peso: 22,
         cinturon: 'Verde',
-        altura: 110,
+        altura: 101,
         club : 'OBELIUS'
       },
       bracket: {
@@ -28,7 +28,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         fechaNacimiento: '2018-10-25',
         peso: 18,
         cinturon: 'Amarillo',
-        altura: 110,
+        altura: 102,
         club : 'OBELIUS'
       },
       bracket: {
@@ -41,7 +41,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         id: 3,
         nombreCompleto: 'Ivan David Gonzalez Agulo',
         fechaNacimiento: '1988-10-25',
-        peso: 100,
+        peso: 99,
         cinturon: 'Azul',
         altura: 110,
         club : 'OBELIUS'
@@ -58,7 +58,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         fechaNacimiento: '2013-09-10',
         peso: 22,
         cinturon: 'Amarillo',
-        altura: 110,
+        altura: 104,
         club : 'OBELIUS'
       },
       bracket: {
@@ -72,7 +72,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         nombreCompleto: 'Victor Felipe Fonseca Rojas',
         fechaNacimiento: '2013-09-10',
         peso: 25,
-        cinturon: 'Amarillo',
+        cinturon: 'Blanco',
         altura: 110,
         club : 'OBELIUS'
       },

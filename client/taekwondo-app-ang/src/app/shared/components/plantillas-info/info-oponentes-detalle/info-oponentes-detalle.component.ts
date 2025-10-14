@@ -19,10 +19,10 @@ interface OpponentDataRow {
 }
 
 @Component({
-  selector: 'app-info-oponentes-2',
+  selector: 'app-info-oponentes-detalle',
   imports: [...AllSharedImports],
-  templateUrl: './info-oponentes-2.component.html',
-  styleUrl: './info-oponentes-2.component.scss',
+  templateUrl: './info-oponentes-detalle.component.html',
+  styleUrl: './info-oponentes-detalle.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoOponentes2Component implements OnChanges {

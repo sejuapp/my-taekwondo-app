@@ -64,7 +64,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
 
   sePuedeCambiar = computed(() => {
     const opponentClick = this.itemBracketsSelect()?.idOpponentClick;
-    return Boolean(opponentClick);
+    return Boolean(opponentClick && this.declararGanador());
   });
 
   sePuedeReiniciar = computed(() => {
