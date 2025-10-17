@@ -1,21 +1,22 @@
-import { Component, computed, Inject, signal } from '@angular/core';
+import { Component, Inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { IItemBracketsSelect, IOpcionSeleccionar, IOpponentBracketSelect } from '@app/interface/item-brackets-select';
+import { IItemBracketsSelect } from '@app/interface/item-brackets-select';
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
+import { CloseModalButtonComponent } from '@app/shared/components/modales/buttons/close-modal-button/close-modal-button.component';
 import { InfoEncabezadoMatchComponent } from '@app/shared/components/plantillas-info/info-encabezado-match/info-encabezado-match.component';
 import { InfoOponentes2Component } from '@app/shared/components/plantillas-info/info-oponentes-detalle/info-oponentes-detalle.component';
-import { AccionCompetidorEnum } from '@app/shared/enum/accion-competidor.enum';
 
 @Component({
   selector: 'app-detalle-match',
   imports: [
-      ...AllSharedImports,
-      InfoOponentes2Component,
-      InfoEncabezadoMatchComponent,
-    ],
+    ...AllSharedImports,
+    CloseModalButtonComponent,
+    InfoOponentes2Component,
+    InfoEncabezadoMatchComponent,
+  ],
   templateUrl: './detalle-match.component.html',
-  styleUrl: './detalle-match.component.scss'
+  styleUrl: './detalle-match.component.scss',
 })
 export class DetalleMatchComponent {
   itemBracketsSelect = signal<IItemBracketsSelect | null>(null);

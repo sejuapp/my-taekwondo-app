@@ -1,0 +1,19 @@
+/** Esto es para que el boton quede en una esquina superior de la ventana del navegador
+.icon-close-modal {
+  position: fixed !important;
+  top: 16px !important;
+  right: 16px !important;
+  z-index: 1000 !important;
+  color: #000000 !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+  */
+
+.icon-close-modal {
+  position: absolute !important;
+  top: 0px !important;
+  right: 0px !important;
+  z-index: 10 !important;
+  color: #000000 !important;
+}

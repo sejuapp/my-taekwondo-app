@@ -8,7 +8,6 @@
 /* Contenido del panel optimizado */
 .panel-content {
   padding: 12px 16px !important;
-  background-color: #fafafa;
 }
 
 /* Fila de información horizontal con flex centrado */
@@ -26,7 +25,7 @@
   align-items: center;
   background-color: white;
   border-radius: 6px;
-  padding: 3px 3px;
+  padding: 4px 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   /* Tamaño fijo de 130px */
   flex: 0 0 95px;

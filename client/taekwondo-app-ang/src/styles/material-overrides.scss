@@ -1,0 +1,14 @@
+.custom-card-header {
+  display: block !important;
+}
+
+.mat-mdc-row {
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
+}

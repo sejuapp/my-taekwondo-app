@@ -57,7 +57,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         nombreCompleto: 'Juan Carlos Rojas Estupiñan',
         fechaNacimiento: '2013-09-10',
         peso: 22,
-        cinturon: 'Amarillo',
+        cinturon: 'Negro',
         altura: 104,
         club : 'OBELIUS'
       },

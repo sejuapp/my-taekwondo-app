@@ -1,21 +1,14 @@
 <mat-card-custom>
-  <mat-card-header class="custom-card-header" [ngClass]="'encabezado-cinturon-' + (competidorAntiguo?.persona?.cinturon?.toLowerCase() || 'null')">
+  <mat-card-header>
     <app-close-modal-button (close)="cerrar()"> </app-close-modal-button>
 
-    <mat-card-title class="text-center">{{ competidorAntiguo?.bracket?.name }}</mat-card-title>
-    <mat-card-subtitle class="pt-1 pb-1">
-      <app-info-oponentes-1 [persona]="competidorAntiguo?.persona ?? null"></app-info-oponentes-1>
+    <mat-card-title>Lista participantes</mat-card-title>
+    <mat-card-subtitle>
+      Se listan los participantes de la categoría con los que se generan las llaves de eliminación.
     </mat-card-subtitle>
   </mat-card-header>
   <mat-dialog-content>
-    <p>
-      <strong>Instrucciones:</strong><br />
-      • Seleccione una fila para elegir al nuevo participante.<br />
-      • Ordene por peso, altura o edad haciendo click en los encabezados de
-      columna.
-    </p>
 
-    <mat-divider class="divider-spacing"></mat-divider>
     <br />
 
     <div class="mat-elevation-z8 table-responsive">
@@ -61,8 +54,7 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns"
-          [ngClass]="'fila-cinturon-' + (row?.persona?.cinturon?.toLowerCase() || 'null')"
-          (click)="onCambiarCompetidor(row)">
+          [ngClass]="'fila-cinturon-' + (row?.persona?.cinturon?.toLowerCase() || 'null')">
         </tr>
 
 

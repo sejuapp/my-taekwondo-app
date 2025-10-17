@@ -16,12 +16,13 @@ import { IParticipantCategoria } from '@app/interface/request/info-torneo-catego
 import { IGestionTorneoData } from '@app/interface/torneo-data';
 import { MessageService } from '@app/services/message/message.service';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
+import { CloseModalButtonComponent } from '@app/shared/components/modales/buttons/close-modal-button/close-modal-button.component';
 import { InfoOponentes1Component } from '@app/shared/components/plantillas-info/info-oponentes-1/info-oponentes-1.component';
 import { IdOpponent } from '@app/type/type-brackets';
 
 @Component({
   selector: 'app-reasignar-competidor',
-  imports: [...AllSharedImports, InfoOponentes1Component],
+  imports: [...AllSharedImports, InfoOponentes1Component, CloseModalButtonComponent],
   templateUrl: './reasignar-competidor.component.html',
   styleUrl: './reasignar-competidor.component.scss',
 })

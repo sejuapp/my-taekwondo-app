@@ -10,31 +10,102 @@
   width: 100% !important;
 }
 
+/* Variables CSS para los colores */
+:root {
+
+  --fila-encabe-blanco: #d5d5d5;
+  --cinturon-blanco: #ffffff;
+  --cinturon-amarillo: #ffc508;
+  --cinturon-verde: #34a74f;
+  --cinturon-azul: #1b61bd;
+  --cinturon-rojo: #ee2334;
+  --cinturon-negro: #000000;
+  --cinturon-null: #d6d8db;
+}
+
 .cinturon-blanco {
-  background-color: #f5f5f5 !important;
-  border: 2px solid #dadada !important;
+  background-color: var(--cinturon-blanco) !important;
+  border: 2px solid #bebebe !important;
 }
 
 .cinturon-amarillo {
-  background-color: #ffc508 !important;
+  background-color: var(--cinturon-amarillo) !important;
 }
 
 .cinturon-verde {
-  background-color: #34a74f !important;
+  background-color: var(--cinturon-verde) !important;
 }
 
 .cinturon-azul {
-  background-color: #1b61bd !important;
+  background-color: var(--cinturon-azul) !important;
 }
 
 .cinturon-rojo {
-  background-color: #ee2334 !important;
+  background-color: var(--cinturon-rojo) !important;
 }
 
 .cinturon-negro {
-  background-color: #000000 !important;
+  background-color: var(--cinturon-negro) !important;
 }
 
 .cinturon-null {
-  background-color: #d6d8db !important;
+  background-color: var(--cinturon-null) !important;
+}
+
+/* Estilos para las filas - usa color-mix para transparencia automática */
+.fila-cinturon-blanco {
+  background-color: color-mix(in srgb, var(--fila-encabe-blanco) 15%, transparent) !important;
+}
+
+.fila-cinturon-amarillo {
+  background-color: color-mix(in srgb, var(--cinturon-amarillo) 5%, transparent) !important;
+}
+
+.fila-cinturon-verde {
+  background-color: color-mix(in srgb, var(--cinturon-verde) 5%, transparent) !important;
+}
+
+.fila-cinturon-azul {
+  background-color: color-mix(in srgb, var(--cinturon-azul) 5%, transparent) !important;
+}
+
+.fila-cinturon-rojo {
+  background-color: color-mix(in srgb, var(--cinturon-rojo) 5%, transparent) !important;
+}
+
+.fila-cinturon-negro {
+  background-color: color-mix(in srgb, var(--cinturon-negro) 5%, transparent) !important;
+}
+
+.fila-cinturon-null {
+  background-color: color-mix(in srgb, var(--cinturon-null) 30%, transparent) !important;
+}
+
+/* Estilos para los encabezados - usa color-mix para transparencia automática */
+.encabezado-cinturon-blanco {
+  background-color: color-mix(in srgb, var(--fila-encabe-blanco) 40%, transparent) !important;
+}
+
+.encabezado-cinturon-amarillo {
+  background-color: color-mix(in srgb, var(--cinturon-amarillo) 20%, transparent) !important;
+}
+
+.encabezado-cinturon-verde {
+  background-color: color-mix(in srgb, var(--cinturon-verde) 20%, transparent) !important;
+}
+
+.encabezado-cinturon-azul {
+  background-color: color-mix(in srgb, var(--cinturon-azul) 20%, transparent) !important;
+}
+
+.encabezado-cinturon-rojo {
+  background-color: color-mix(in srgb, var(--cinturon-rojo) 20%, transparent) !important;
+}
+
+.encabezado-cinturon-negro {
+  background-color: color-mix(in srgb, var(--cinturon-negro) 25%, transparent) !important;
+}
+
+.encabezado-cinturon-null {
+  background-color: color-mix(in srgb, var(--cinturon-null) 30%, transparent) !important;
 }

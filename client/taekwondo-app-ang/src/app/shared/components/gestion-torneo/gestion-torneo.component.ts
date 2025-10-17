@@ -29,6 +29,7 @@ import { generateId } from '@app/core/utils';
 import { TournamentService } from '@app/services/brackets/tournament-service';
 import { LoadingBackdropService } from '@app/services/message/loading-backdrop.service';
 import { MessageService } from '@app/services/message/message.service';
+import { ParticipantesCategoriaComponent } from '@app/shared/components/modales/participantes-categoria/participantes-categoria/participantes-categoria.component';
 
 @Component({
   selector: 'app-gestion-torneo',
@@ -419,5 +420,17 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
     } else if (idNuevo && match?.opponent2 && match.opponent2?.id === idActual) {
       match.opponent2.id = idNuevo;
     }
+  }
+
+  verParticipantes() {
+
+    const data = {
+      torneoData: this.torneoData,
+    };
+
+    this._dialogService.open(
+      ParticipantesCategoriaComponent,
+      data
+    );
   }
 }

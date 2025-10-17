@@ -1,8 +1,12 @@
-<p>
-  De click sobre cada oponente para ver las opciones disponibles.
-</p>
+<p>De click sobre cada oponente para ver las opciones disponibles.</p>
+
+<button mat-button (click)="verParticipantes()">Ver participantes</button>
 
 <div [id]="viewerId" class="brackets-viewer"></div>
 
-<app-mat-menu-styled #styledMenu [options]="menuOptionsDynamic" [yPosition]="menuTopLeft.y"
-  [xPosition]="menuTopLeft.x"></app-mat-menu-styled>
+<app-mat-menu-styled
+  #styledMenu
+  [options]="menuOptionsDynamic"
+  [yPosition]="menuTopLeft.y"
+  [xPosition]="menuTopLeft.x"
+></app-mat-menu-styled>

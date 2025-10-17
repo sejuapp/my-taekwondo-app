@@ -10,10 +10,12 @@
   padding-bottom: 20px !important; /* espacio inferior */
 }
 
-.icon-close-modal {
-  position: absolute !important;
-  top: 0px !important;
-  right: 0px !important;
-  z-index: 10 !important;
-  color: #000000 !important;
+/*Estilo para los encabezados de las tablas de particiantes*/
+.info-label-small {
+  font-size: 10px;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1;
 }
