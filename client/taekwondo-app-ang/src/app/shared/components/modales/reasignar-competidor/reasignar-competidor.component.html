@@ -1,5 +1,5 @@
 <mat-card-custom>
-  <mat-card-header class="custom-card-header" [ngClass]="'encabezado-cinturon-' + (competidorAntiguo?.persona?.cinturon?.toLowerCase() || 'null')">
+  <mat-card-header class="custom-card-header opponent-card" [ngClass]="'card-cinturon-' + (competidorAntiguo?.persona?.cinturon?.toLowerCase() || 'null')">
     <app-close-modal-button (close)="cerrar()"> </app-close-modal-button>
 
     <mat-card-title class="text-center">{{ competidorAntiguo?.bracket?.name }}</mat-card-title>

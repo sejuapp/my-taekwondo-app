@@ -2,7 +2,7 @@
   <!-- Información compacta en una sola fila -->
   <div class="info-row">
     <!-- Cinturón -->
-    <div class="info-item-compact">
+    <div class="info-item-compact" [ngClass]="'fila-cinturon-' + (persona?.cinturon?.toLowerCase() || 'null')">
       <mat-icon class="info-icon-small">sports_martial_arts</mat-icon>
       <div class="info-content-compact">
         <span class="info-label-small">Cinturón</span>
@@ -13,7 +13,7 @@
     </div>
 
     <!-- Peso -->
-    <div class="info-item-compact">
+    <div class="info-item-compact" [ngClass]="'fila-cinturon-' + (persona?.cinturon?.toLowerCase() || 'null')">
       <mat-icon class="info-icon-small">monitor_weight</mat-icon>
       <div class="info-content-compact">
         <span class="info-label-small">Peso</span>
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Altura -->
-    <div class="info-item-compact">
+    <div class="info-item-compact" [ngClass]="'fila-cinturon-' + (persona?.cinturon?.toLowerCase() || 'null')">
       <mat-icon class="info-icon-small">height</mat-icon>
       <div class="info-content-compact">
         <span class="info-label-small">Altura</span>
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Edad -->
-    <div class="info-item-compact">
+    <div class="info-item-compact" [ngClass]="'fila-cinturon-' + (persona?.cinturon?.toLowerCase() || 'null')">
       <mat-icon class="info-icon-small">calendar_month</mat-icon>
       <div class="info-content-compact">
         <span class="info-label-small">Edad</span>

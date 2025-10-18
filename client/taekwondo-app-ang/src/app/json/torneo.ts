@@ -14,7 +14,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 22,
         cinturon: 'Verde',
         altura: 101,
-        club : 'OBELIUS'
+        club: 'OBELIUS'
       },
       bracket: {
         id: 1,
@@ -29,7 +29,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 18,
         cinturon: 'Amarillo',
         altura: 102,
-        club : 'OBELIUS'
+        club: 'OBELIUS'
       },
       bracket: {
         id: 2,
@@ -44,7 +44,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 99,
         cinturon: 'Azul',
         altura: 110,
-        club : 'OBELIUS'
+        club: 'OBELIUS'
       },
       bracket: {
         id: 3,
@@ -59,7 +59,7 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 22,
         cinturon: 'Negro',
         altura: 104,
-        club : 'OBELIUS'
+        club: 'OBELIUS'
       },
       bracket: {
         id: 4,
@@ -74,11 +74,26 @@ export const dataTorneo: IInfoTorneoCategoria = {
         peso: 25,
         cinturon: 'Blanco',
         altura: 110,
-        club : 'OBELIUS'
+        club: 'OBELIUS'
       },
       bracket: {
         id: 5,
         name: 'Victor Fonseca',
+      },
+    },
+    {
+      persona: {
+        id: 6,
+        nombreCompleto: 'Angela Montenegro',
+        fechaNacimiento: '2013-09-10',
+        peso: 25,
+        cinturon: 'Rojo',
+        altura: 110,
+        club: 'OBELIUS'
+      },
+      bracket: {
+        id: 6,
+        name: 'Angela Montenegro',
       },
     },
   ],

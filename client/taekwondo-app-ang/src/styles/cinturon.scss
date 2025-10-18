@@ -12,13 +12,12 @@
 
 /* Variables CSS para los colores */
 :root {
-
   --fila-encabe-blanco: #d5d5d5;
   --cinturon-blanco: #ffffff;
   --cinturon-amarillo: #ffc508;
   --cinturon-verde: #34a74f;
   --cinturon-azul: #1b61bd;
-  --cinturon-rojo: #ee2334;
+  --cinturon-rojo: #c2202e;
   --cinturon-negro: #000000;
   --cinturon-null: #d6d8db;
 }
@@ -54,58 +53,86 @@
 
 /* Estilos para las filas - usa color-mix para transparencia automática */
 .fila-cinturon-blanco {
-  background-color: color-mix(in srgb, var(--fila-encabe-blanco) 15%, transparent) !important;
+  background-color: color-mix(in srgb,
+      var(--fila-encabe-blanco) 15%,
+      transparent) !important;
 }
 
 .fila-cinturon-amarillo {
-  background-color: color-mix(in srgb, var(--cinturon-amarillo) 5%, transparent) !important;
+  background-color: color-mix(in srgb,
+      var(--cinturon-amarillo) 5%,
+      transparent) !important;
 }
 
 .fila-cinturon-verde {
-  background-color: color-mix(in srgb, var(--cinturon-verde) 5%, transparent) !important;
+  background-color: color-mix(in srgb,
+      var(--cinturon-verde) 5%,
+      transparent) !important;
 }
 
 .fila-cinturon-azul {
-  background-color: color-mix(in srgb, var(--cinturon-azul) 5%, transparent) !important;
+  background-color: color-mix(in srgb,
+      var(--cinturon-azul) 5%,
+      transparent) !important;
 }
 
 .fila-cinturon-rojo {
-  background-color: color-mix(in srgb, var(--cinturon-rojo) 5%, transparent) !important;
+  background-color: color-mix(in srgb,
+      var(--cinturon-rojo) 5%,
+      transparent) !important;
 }
 
 .fila-cinturon-negro {
-  background-color: color-mix(in srgb, var(--cinturon-negro) 5%, transparent) !important;
+  background-color: color-mix(in srgb,
+      var(--cinturon-negro) 5%,
+      transparent) !important;
 }
 
 .fila-cinturon-null {
-  background-color: color-mix(in srgb, var(--cinturon-null) 30%, transparent) !important;
+  background-color: color-mix(in srgb,
+      var(--cinturon-null) 30%,
+      transparent) !important;
 }
 
-/* Estilos para los encabezados - usa color-mix para transparencia automática */
-.encabezado-cinturon-blanco {
-  background-color: color-mix(in srgb, var(--fila-encabe-blanco) 40%, transparent) !important;
-}
+/* Estilos para las cards de oponentes */
+.opponent-card {
 
-.encabezado-cinturon-amarillo {
-  background-color: color-mix(in srgb, var(--cinturon-amarillo) 20%, transparent) !important;
-}
+  // Línea decorativa con degradado vertical
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px; // Altura para ver bien el degradado
+  }
 
-.encabezado-cinturon-verde {
-  background-color: color-mix(in srgb, var(--cinturon-verde) 20%, transparent) !important;
-}
+  // Líneas para cada cinturón con degradado de arriba hacia abajo
+  &.card-cinturon-blanco::before {
+    background: var(--fila-encabe-blanco);
+  }
 
-.encabezado-cinturon-azul {
-  background-color: color-mix(in srgb, var(--cinturon-azul) 20%, transparent) !important;
-}
+  &.card-cinturon-amarillo::before {
+    background: var(--cinturon-amarillo);
+  }
 
-.encabezado-cinturon-rojo {
-  background-color: color-mix(in srgb, var(--cinturon-rojo) 20%, transparent) !important;
-}
+  &.card-cinturon-verde::before {
+    background: var(--cinturon-verde);
+  }
 
-.encabezado-cinturon-negro {
-  background-color: color-mix(in srgb, var(--cinturon-negro) 25%, transparent) !important;
-}
+  &.card-cinturon-azul::before {
+    background: var(--cinturon-azul);
+  }
 
-.encabezado-cinturon-null {
-  background-color: color-mix(in srgb, var(--cinturon-null) 30%, transparent) !important;
+  &.card-cinturon-rojo::before {
+    background: var(--cinturon-rojo);
+  }
+
+  &.card-cinturon-negro::before {
+    background: var(--cinturon-negro);
+  }
+
+  &.card-cinturon-null::before {
+    background: var(--cinturon-null);
+  }
 }
