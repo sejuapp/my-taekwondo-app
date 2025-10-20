@@ -60,7 +60,15 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
   participantsMap = signal<Map<number, IParticipantCategoria | null>>(
     new Map()
   );
+
   itemBracketsSelect = signal<IItemBracketsSelect | null>(null);
+
+  // Computed para saber si el click es de ESTE torneo
+  isMyClickMatch = computed(() => {
+    const myClick =
+      this.messageClickMatch()?.viewerBracketId === this.viewerBracketId;
+    return myClick;
+  });
 
   declararGanador = computed(() => {
     const match = this.itemBracketsSelect()?.match;
@@ -131,9 +139,7 @@ export class GestionTorneoComponent implements OnInit, AfterViewInit {
 
   eventoClickMatch() {
     effect(() => {
-      const miTorneo =
-        this.messageClickMatch()?.viewerBracketId === this.viewerBracketId;
-      if (miTorneo) {
+      if (this.isMyClickMatch()) {
         this.handleMatchAction(this.messageClickMatch());
       }
     });
