@@ -1,0 +1,12 @@
+<div [id]="viewerContainerId">
+  @for (item of tournamentsData(); track $index) {
+  <br>
+  <app-gestion-torneo
+    [messageClickMatch]="messageClickMatch"
+    [torneoData]="item"
+  >
+  </app-gestion-torneo>
+  <br>
+  <mat-divider class="divider-spacing"></mat-divider>
+  }
+</div>

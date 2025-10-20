@@ -18,7 +18,7 @@ export class ViewerService {
    * @returns Un Observable de los clics en los oponentes o un Observable vacío si falla.
    */
   async initializeViewer(
-    selectorId: string | number,
+    selectorId: string | number
   ): Promise<Observable<IResponseSelectMatch>> {
     return this.setupBracketEvents(selectorId);
   }
@@ -31,7 +31,9 @@ export class ViewerService {
   async viewerRender(selectorId: string | number, tournamentData: any) {
     const viewer = window.bracketsViewer;
     const selectorStr = String(selectorId);
-    const miSelector = selectorStr.startsWith('#') ? selectorStr : `#${selectorStr}`;
+    const miSelector = selectorStr.startsWith('#')
+      ? selectorStr
+      : `#${selectorStr}`;
     await viewer.render(tournamentData, { selector: miSelector, clear: true });
   }
 
@@ -88,14 +90,21 @@ export class ViewerService {
     const participantId = participantElement.getAttribute(
       'data-participant-id'
     );
+
     const parsedOpponentId = participantId ? parseInt(participantId, 10) : null;
 
+    // 5. Encontrar el contenedor principal del viewer (la clase .brackets-viewer)
+    const viewerElement = matchElement.closest('.brackets-viewer');
+    const viewerBracketId = viewerElement?.getAttribute('id') || '';
+
+    // 6. Coordenadas
     const coordinates: ICoordinates = {
       x: event.clientX,
       y: event.clientY,
     };
 
     return {
+      viewerBracketId: viewerBracketId,
       idMatch: parsedMatchId,
       idOpponent: parsedOpponentId,
       coordinates,

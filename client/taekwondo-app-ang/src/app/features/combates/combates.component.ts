@@ -2,18 +2,15 @@ import { Component, OnInit, signal } from '@angular/core';
 import { IInfoTorneoCategoria } from '@app/interface/request/info-torneo-categoria';
 import {
   IGestionTorneoData,
-  ITorneoCreateData,
 } from '@app/interface/torneo-data';
 import { dataTorneo } from '@app/json/torneo';
-import { LoadingBackdropService } from '@app/services/message/loading-backdrop.service';
-import { MessageService } from '@app/services/message/message.service';
+import { dataTorneo2 } from '@app/json/torneo2';
 import { AllSharedImports } from '@app/shared/all-shared-imports';
-
-import { GestionTorneoComponent } from '@app/shared/components/gestion-torneo/gestion-torneo.component';
+import { GestionContenedorComponent } from '@app/shared/components/gestion-torneo/gestion-contenedor/gestion-contenedor.component';
 
 @Component({
   selector: 'app-combates',
-  imports: [...AllSharedImports, GestionTorneoComponent],
+  imports: [...AllSharedImports, GestionContenedorComponent],
   templateUrl: './combates.component.html',
   styleUrl: './combates.component.scss',
 })
@@ -28,6 +25,11 @@ export class CombatesComponent implements OnInit {
 
   private async cargarTorneos() {
     this.agregarTorneo(dataTorneo);
+
+    setTimeout(()=> {
+      this.agregarTorneo(dataTorneo2);
+    }, 5000);
+
   }
 
   async agregarTorneo(miTorneoCategoria: IInfoTorneoCategoria) {

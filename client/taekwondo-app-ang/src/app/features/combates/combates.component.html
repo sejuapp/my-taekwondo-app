@@ -1,17 +1,16 @@
 <mat-card-custom>
   <mat-card-header>
     <mat-card-title>Emparejamiento</mat-card-title>
-    <mat-card-subtitle>Se realiza el emparejamiento de los competidores</mat-card-subtitle>
+    <mat-card-subtitle
+      >Se realiza el emparejamiento de los competidores</mat-card-subtitle
+    >
   </mat-card-header>
 
   <mat-card-content class="custom-content">
-    @for (item of tournamentsData(); track $index) {
-      <app-gestion-torneo
-        [torneoData]="item">
-      </app-gestion-torneo>
-    }
+    <app-gestion-contenedor
+      [tournamentsData]="tournamentsData"
+    ></app-gestion-contenedor>
   </mat-card-content>
 
-  <mat-card-actions class="custom-actions">
-  </mat-card-actions>
+  <mat-card-actions class="custom-actions"> </mat-card-actions>
 </mat-card-custom>
